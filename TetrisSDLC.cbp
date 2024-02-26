@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="TetrisSDLC" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/SDLProject" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="libs/include/SDL2" />
+				</Compiler>
+				<Linker>
+					<Add option="-lmingw32 -lSDL2main -lSDL2" />
+					<Add option="-lSDL2_image -lSDL2_ttf" />
+					<Add directory="libs/lib" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/SDLProject" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="assets/blocks/I.png" />
+		<Unit filename="assets/blocks/J.png" />
+		<Unit filename="assets/blocks/J2.png" />
+		<Unit filename="assets/blocks/L.png" />
+		<Unit filename="assets/blocks/O.png" />
+		<Unit filename="assets/blocks/S.png" />
+		<Unit filename="assets/blocks/T.png" />
+		<Unit filename="assets/blocks/Z.png" />
+		<Unit filename="assets/fonts/ka1.ttf" />
+		<Unit filename="assets/square/Blue.png" />
+		<Unit filename="assets/square/Green.png" />
+		<Unit filename="assets/square/LightBlue.png" />
+		<Unit filename="assets/square/Orange.png" />
+		<Unit filename="assets/square/Purple.png" />
+		<Unit filename="assets/square/Red.png" />
+		<Unit filename="assets/square/Yellow.png" />
+		<Unit filename="include/config.h" />
+		<Unit filename="include/easy_sdl.h" />
+		<Unit filename="include/tetris_asset.h" />
+		<Unit filename="main.cpp">
+			<Option target="Debug" />
+		</Unit>
+		<Unit filename="src/easy_sdl.cpp" />
+		<Unit filename="src/testris_asset.cpp" />
+		<Unit filename="test/loading_assets.cpp" />
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
