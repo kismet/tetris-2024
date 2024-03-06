@@ -53,3 +53,4 @@ dkms.conf
 bin/
 .idea/
 TetrisSDLC.depend
+cmake-build-debug/
