@@ -19,6 +19,9 @@ typedef struct Easy_SDL_Context {
 
 static Easy_SDL_Context_t context;
 
+static int findAssetByName(char* path);
+static bool canLoadAsset();
+static Easy_Asset_t * isAssetAlreadyLoaded(char* path);
 
 SDL_Window* getSDLWindow(){
     return context.window;
@@ -136,15 +139,66 @@ Easy_Asset_t* getAssetById(uint16_t id){
 }
 
 Easy_Asset_t* loadAsset(char* path){
-    Easy_Asset_t* t = loadImage(path);
+    Easy_Asset_t* t = isAssetAlreadyLoaded(path);
     if (t != NULL) return t;
+
+    t = loadImage(path);
+    if (t != NULL) return t;
+
     t = loadFont(path);
     return t;
 }
 
+Easy_Asset_t * isAssetAlreadyLoaded(char* path){
+    int idx = findAssetByName(path);
+    if( idx != -1){
+        return &(context.assets[idx]);
+    }
+    return NULL;
+}
+
+bool canLoadAsset(){
+    if ( context.renderer == NULL ) {
+        cerr << "No valid render. Assets cannot be loaded! Please invoke ??? first" << endl;
+        return false;
+    }
+
+    if( context.n_assets == context.max_assets ){
+        //TODO increase number of assets
+        cerr<<"No more space for loading assets. Dynamic assets memories will fixed in next release"<<endl;
+        return false;
+    }
+    return true;
+}
 
 Easy_Asset_t* loadFont(char* path){
-    return NULL;
+    Easy_Asset_t* asset = isAssetAlreadyLoaded(path);
+    if( asset != NULL ){
+        return asset;
+    }
+    if(!canLoadAsset()){
+        return NULL;
+    }
+
+    TTF_Font* font = TTF_OpenFont(path, EASY_SDL_DEFAULT_FONT_SIZE);
+
+    if(!font){
+        cerr<<"Unable to open font "<<path
+            <<" Please check that file exits."<<endl
+            <<"SDL says:"<<TTF_GetError()<<endl<<endl;
+        return NULL;
+    }
+    asset->detail.size = EASY_SDL_DEFAULT_FONT_SIZE;
+    asset->type = ASSET_FONT;
+    asset->loaded = true;
+    asset->id = context.n_assets;
+    asset->origin = (char *) malloc(strlen(path));
+    strcpy(asset->origin,path);
+    context.n_assets++;
+
+    //TODO init name
+    return asset;
+
 }
 
 int findAssetByName(char* path){
@@ -157,24 +211,15 @@ int findAssetByName(char* path){
 }
 
 Easy_Asset_t* loadImage(char* path){
-    if ( context.renderer == NULL ) {
-        cerr << "No valid render. Assets cannot be loaded! Please invoke ??? first" << endl;
+    Easy_Asset_t* asset = isAssetAlreadyLoaded(path);
+    if( asset != NULL ){
+        return asset;
+    }
+    if(!canLoadAsset()){
         return NULL;
     }
 
-    int idx = findAssetByName(path);
-    if( idx != -1){
-        return &(context.assets[idx]);
-    }
-
-    if( context.n_assets == context.max_assets ){
-        //TODO increase number of assets
-        cerr<<"No more space for loading assets. Dynamic assets memories will fixed in next release"<<endl;
-        return NULL;
-    }
-
-
-    Easy_Asset_t* asset = &context.assets[context.n_assets];
+    asset = &context.assets[context.n_assets];
 
     SDL_Surface* image = IMG_Load(path);
     if(!image){

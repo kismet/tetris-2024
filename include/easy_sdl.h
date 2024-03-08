@@ -7,6 +7,7 @@
 #define EASY_SDL_DEFAULT_WINDOW_HEIGHT 768
 #define EASY_SDL_DEFAULT_WINDOW_WIDTH 1366
 #define EASY_SDL_DEFAULT_WINDOW_OPTIONS SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN
+#define EASY_SDL_DEFAULT_FONT_SIZE 18
 
 
 typedef struct Image_Asset {
@@ -17,7 +18,7 @@ typedef struct Image_Asset {
 } Image_Asset_t;
 
 typedef struct Font_Asset {
-    bool placeholder;
+    int size;
 } Font_Asset_t;
 
 typedef enum Asset_Type{
