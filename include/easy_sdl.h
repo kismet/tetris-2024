@@ -2,6 +2,7 @@
 #define EASY_SDL_H
 
 #include <SDL.h>
+#include <SDL_ttf.h>
 
 #define EASY_SDL_DEFAULT_ASSET_SLOT 50
 #define EASY_SDL_DEFAULT_WINDOW_HEIGHT 768
@@ -19,7 +20,15 @@ typedef struct Image_Asset {
 
 typedef struct Font_Asset {
     int size;
+    bool monospaced;
+    TTF_Font* font;
 } Font_Asset_t;
+
+typedef enum Text_Options{
+    TEXT_LEFT = 0,
+    TEXT_CENTERED = 1,
+    TEXT_RIGHT = 2
+} Text_Options_t;
 
 typedef enum Asset_Type{
     ASSET_IMAGE, ASSET_FONT
@@ -39,6 +48,18 @@ typedef struct Easy_Asset {
     char* name;
     Easy_Asset_Union_t detail;
 } Easy_Asset_t;
+
+typedef struct TextStyle {
+    bool solid;
+    uint8_t size;
+    bool italic;
+    bool underline;
+    bool bold;
+    bool strikethrough;
+    Easy_Asset_t* font;
+    SDL_Color foreground = {255, 255, 255, 255};
+} TextStyle_t;
+
 
 /**
  * This is the <b>FIRST</b> that must invoked by the developers
@@ -79,9 +100,6 @@ Easy_Asset_t* loadAsset(char* path);
  */
 Easy_Asset_t* getAssetById(uint16_t id);
 
-//
-//Easy_Asset_t* getAssetById(char* name);
-
 /**
  * Load a Font as Assets and return it, otherwise it will delete
  *
@@ -98,6 +116,16 @@ void drawAsset(uint16_t x, uint16_t y, Easy_Asset_t* asset, uint16_t rotation, f
 void drawAsset(uint16_t x, uint16_t y, Easy_Asset_t* asset, uint16_t rotation);
 
 void drawAsset(uint16_t x, uint16_t y, Easy_Asset_t* asset);
+
+void setTextStyle(TextStyle_t* style);
+
+TextStyle_t* getTextStyle();
+
+
+
+void drawText(uint16_t x, uint16_t y, char *);
+
+void drawText(uint16_t x, uint16_t y, uint16_t w, uint16_t h, char *, uint32_t options);
 
 /**
  * The following section contains function that allows the developer

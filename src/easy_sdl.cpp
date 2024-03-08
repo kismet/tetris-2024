@@ -15,6 +15,7 @@ typedef struct Easy_SDL_Context {
     uint16_t n_assets = 0;
     uint16_t max_assets = 0;
     Easy_Asset_t* assets = NULL;
+    TextStyle_t* text_style = NULL;
 } Easy_SDL_Context_t;
 
 static Easy_SDL_Context_t context;
@@ -188,7 +189,10 @@ Easy_Asset_t* loadFont(char* path){
             <<"SDL says:"<<TTF_GetError()<<endl<<endl;
         return NULL;
     }
-    asset->detail.size = EASY_SDL_DEFAULT_FONT_SIZE;
+    asset = &(context.assets[context.n_assets]);
+    asset->detail.font.font = font;
+    asset->detail.font.size = EASY_SDL_DEFAULT_FONT_SIZE;
+    asset->detail.font.monospaced = TTF_FontFaceIsFixedWidth(font);
     asset->type = ASSET_FONT;
     asset->loaded = true;
     asset->id = context.n_assets;
@@ -225,7 +229,7 @@ Easy_Asset_t* loadImage(char* path){
     if(!image){
         cerr<<"Unable to load "<<path
             <<" Please check that file exits."<<endl
-            <<"SDL says:"<<SDL_GetError()<<endl<<endl;
+            <<"SDL says:"<<IMG_GetError()<<endl<<endl;
         return NULL;
     }
     asset->detail.image.surface = image;
@@ -276,3 +280,35 @@ void drawAsset(uint16_t x, uint16_t y, Easy_Asset_t* asset){
     drawAsset(x,y,asset,0,1.0);
 }
 
+
+void drawText(uint16_t x, uint16_t y, char* txt){
+    SDL_Surface* text;
+// Set color to black
+    TTF_Font* font = context.text_style->font->detail.font.font;
+    text = TTF_RenderText_Solid(font, txt, context.text_style->foreground );
+    if ( !text ) {
+        cout << "Failed to render text: " << TTF_GetError() << endl;
+    }
+
+    SDL_Texture* texture;
+    texture = SDL_CreateTextureFromSurface( context.renderer, text );
+
+    SDL_Rect dst = { 0, 0, text->w, text->h };
+
+    SDL_RenderCopy( context.renderer, texture, NULL, &dst );
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(text);
+}
+
+void drawText(uint16_t x, uint16_t y, uint16_t w, uint16_t h, char *, uint32_t options){
+    //TODO
+}
+
+void setTextStyle(TextStyle_t* style){
+    context.text_style = (TextStyle_t *) malloc(sizeof(TextStyle_t));
+    memcpy(context.text_style,style,sizeof(TextStyle_t));
+}
+
+TextStyle_t* getTextStyle(){
+    return context.text_style;
+}
