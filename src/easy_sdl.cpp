@@ -128,8 +128,32 @@ bool initEasySDL(char* title, int width, int height, uint32_t options ){
     }
 }
 
+Easy_Asset_t* getAssetById(uint16_t id){
+    if(id >= context.n_assets )
+        return NULL;
+
+    return &(context.assets[id]);
+}
+
+Easy_Asset_t* loadAsset(char* path){
+    Easy_Asset_t* t = loadImage(path);
+    if (t != NULL) return t;
+    t = loadFont(path);
+    return t;
+}
+
+
 Easy_Asset_t* loadFont(char* path){
     return NULL;
+}
+
+int findAssetByName(char* path){
+    for(int i=0;i<context.n_assets;i++){
+        if(strcmp(path,context.assets[i].origin) == 0)
+            return i;
+
+    }
+    return -1;
 }
 
 Easy_Asset_t* loadImage(char* path){
@@ -138,16 +162,25 @@ Easy_Asset_t* loadImage(char* path){
         return NULL;
     }
 
+    int idx = findAssetByName(path);
+    if( idx != -1){
+        return &(context.assets[idx]);
+    }
+
     if( context.n_assets == context.max_assets ){
         //TODO increase number of assets
         cerr<<"No more space for loading assets. Dynamic assets memories will fixed in next release"<<endl;
         return NULL;
     }
+
+
     Easy_Asset_t* asset = &context.assets[context.n_assets];
 
-    SDL_Surface* image = SDL_LoadBMP(path);
+    SDL_Surface* image = IMG_Load(path);
     if(!image){
-        cerr<<"Unable to load "<<path<<" "<<SDL_GetError();
+        cerr<<"Unable to load "<<path
+            <<" Please check that file exits."<<endl
+            <<"SDL says:"<<SDL_GetError()<<endl<<endl;
         return NULL;
     }
     asset->detail.image.surface = image;
@@ -160,6 +193,7 @@ Easy_Asset_t* loadImage(char* path){
         cerr<<"Unable to create texture "<<path<<" "<<SDL_GetError();
         return NULL;
     }
+    asset->loaded = true;
     asset->detail.image.texture = texture;
     asset->type = ASSET_IMAGE;
     asset->id = context.n_assets;
@@ -170,4 +204,30 @@ Easy_Asset_t* loadImage(char* path){
     return asset;
 }
 
+void drawAsset(uint16_t x, uint16_t y, Easy_Asset_t* asset,
+               uint16_t rotation, float scaling){
+
+    if ( asset->type != ASSET_IMAGE )
+        return;
+    SDL_Rect rect;
+    rect.w = asset->detail.image.width;
+    rect.h = asset->detail.image.height;
+    rect.x = x;
+    rect.y = y;
+
+    SDL_RenderCopyEx(
+        context.renderer,
+        asset->detail.image.texture,
+        NULL, &rect,
+        rotation, NULL,
+        SDL_FLIP_NONE);
+}
+
+void drawAsset(uint16_t x, uint16_t y, Easy_Asset_t* asset, uint16_t rotation){
+    drawAsset(x,y,asset,rotation,1.0);
+}
+
+void drawAsset(uint16_t x, uint16_t y, Easy_Asset_t* asset){
+    drawAsset(x,y,asset,0,1.0);
+}
 

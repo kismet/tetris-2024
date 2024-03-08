@@ -65,7 +65,7 @@ bool initEasySDL();
 
 bool freeEasySDL();
 
-// TODO lazy loading assest
+// TODO lazy loading asset
 // Easy_Asset_t* addAsset(char* path);
 
 Easy_Asset_t* loadAsset(char* path);
@@ -76,7 +76,7 @@ Easy_Asset_t* loadAsset(char* path);
  * @param id the id that represents the asset to require
  * @return the Asset matching the id or NULL if none is found
  */
-Easy_Asset_t* getAssetById(int id);
+Easy_Asset_t* getAssetById(uint16_t id);
 
 //
 //Easy_Asset_t* getAssetById(char* name);
@@ -92,11 +92,11 @@ Easy_Asset_t* loadFont(char* path);
 
 Easy_Asset_t* loadImage(char* path);
 
-void drawAsset(uint16_t x, uint16_t y, SDL_Texture *asset, uint16_t rotation, float scaling);
+void drawAsset(uint16_t x, uint16_t y, Easy_Asset_t* asset, uint16_t rotation, float scaling);
 
-void drawAsset(uint16_t x, uint16_t y, SDL_Texture *asset, uint16_t rotation);
+void drawAsset(uint16_t x, uint16_t y, Easy_Asset_t* asset, uint16_t rotation);
 
-void drawAsset(uint16_t x, uint16_t y, SDL_Texture *asset);
+void drawAsset(uint16_t x, uint16_t y, Easy_Asset_t* asset);
 
 /**
  * The following section contains function that allows the developer
