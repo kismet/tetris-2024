@@ -14,10 +14,16 @@ link_directories(
 #add_executable(test_easysdl_init
 #        easy_sdl_init.cpp
 #)
+add_executable(test_asset_easysdl
+        test/easy_sdl_asset.cpp
+        src/easy_sdl.cpp
+)
+target_link_libraries(test_asset_easysdl SDL2 SDL2_image SDL2_ttf)
 
-add_executable(test_easysdl_init
+
+add_executable(test_init_easysdl
         test/easy_sdl_init.cpp
         src/easy_sdl.cpp
 )
 
-target_link_libraries(test_easysdl_init SDL2 SDL2_image SDL2_ttf)
+target_link_libraries(test_init_easysdl SDL2 SDL2_image SDL2_ttf)
