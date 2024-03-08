@@ -92,9 +92,15 @@ bool loop() {
                 break;
         }
         drawText(playerOne.x+50,playerOne.y+50, "Funziona!");
+        /*
         drawText(
-                playerOne.x,playerOne.y,
+                0,0,
                 EASY_SDL_DEFAULT_WINDOW_HEIGHT, EASY_SDL_DEFAULT_WINDOW_WIDTH,
+                "Testo Centrato", TEXT_CENTERED
+        ); */
+        drawText(
+                0,0,
+                EASY_SDL_DEFAULT_WINDOW_WIDTH, EASY_SDL_DEFAULT_WINDOW_HEIGHT,
                 "Testo Centrato", TEXT_CENTERED
         );
         SDL_RenderPresent(getSDLRender());

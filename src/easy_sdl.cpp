@@ -282,6 +282,10 @@ void drawAsset(uint16_t x, uint16_t y, Easy_Asset_t* asset){
 
 
 void drawText(uint16_t x, uint16_t y, char* txt){
+    drawText(x, y, 0,0,txt,0);
+}
+
+void drawText(uint16_t x, uint16_t y, uint16_t w, uint16_t h, char* txt, uint32_t options){
     SDL_Surface* text;
 // Set color to black
     TTF_Font* font = context.text_style->font->detail.font.font;
@@ -293,15 +297,21 @@ void drawText(uint16_t x, uint16_t y, char* txt){
     SDL_Texture* texture;
     texture = SDL_CreateTextureFromSurface( context.renderer, text );
 
-    SDL_Rect dst = { 0, 0, text->w, text->h };
+    SDL_Rect dst = { x, y, text->w, text->h };
+    if ( w != 0 || h !=0 ){
+        dst.w = w;
+        dst.h = h;
+    }
+    if (options & TEXT_CENTERED ){
+        dst.x = (w-text->w)/2;
+        dst.y = (h-text->h)/2;
+        dst.w = text->w;
+        dst.h = text->h;
+    }
 
     SDL_RenderCopy( context.renderer, texture, NULL, &dst );
     SDL_DestroyTexture(texture);
     SDL_FreeSurface(text);
-}
-
-void drawText(uint16_t x, uint16_t y, uint16_t w, uint16_t h, char *, uint32_t options){
-    //TODO
 }
 
 void setTextStyle(TextStyle_t* style){
