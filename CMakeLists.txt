@@ -29,3 +29,11 @@ add_executable(test_init_easysdl
         src/easy_sdl.cpp
 )
 target_link_libraries(test_init_easysdl SDL2 SDL2_image SDL2_ttf)
+
+
+add_executable(first_demo
+        test/loading_assets.cpp
+        src/easy_sdl.cpp
+        src/testris_asset.cpp
+)
+target_link_libraries(first_demo SDL2 SDL2_image SDL2_ttf)

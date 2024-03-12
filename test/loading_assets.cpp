@@ -192,3 +192,7 @@ void kill() {
     SDL_DestroyWindow( window );
     SDL_Quit();
 }
+
+int main(int argc,char** args){
+    exit(main_loading_assets(argc,args));
+}

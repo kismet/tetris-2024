@@ -70,5 +70,6 @@ bool loadAssets(SDL_Renderer* render){
         images[i].texture = block;
         n_images++;
     }
+    return true;
 }
 
