@@ -117,14 +117,34 @@ void drawAsset(uint16_t x, uint16_t y, Easy_Asset_t* asset, uint16_t rotation);
 
 void drawAsset(uint16_t x, uint16_t y, Easy_Asset_t* asset);
 
+/**
+ * Assegna lo stile e ne effettua una copia interna
+ *
+ * @param style
+ */
 void setTextStyle(TextStyle_t* style);
 
+/**
+ * Restituisce lo stile corrente
+ *
+ * @return
+ */
 TextStyle_t* getTextStyle();
 
 
-
+/**
+ * Scrive il testo con lo stile corrente nella posizione (x,y)
+ * @param x
+ * @param y
+ */
 void drawText(uint16_t x, uint16_t y, char *);
 
+/**
+ * Scrive il testo con lo stile corrente nella posizione (x,y) all'interno
+ * dello spazio (w,h)
+ * @param x
+ * @param y
+ */
 void drawText(uint16_t x, uint16_t y, uint16_t w, uint16_t h, char *, uint32_t options);
 
 /**
