@@ -315,7 +315,9 @@ void drawText(uint16_t x, uint16_t y, uint16_t w, uint16_t h, char* txt, uint32_
 }
 
 void setTextStyle(TextStyle_t* style){
-    context.text_style = (TextStyle_t *) malloc(sizeof(TextStyle_t));
+    if(context.text_style == NULL){
+        context.text_style = (TextStyle_t *) malloc(sizeof(TextStyle_t));
+    }
     memcpy(context.text_style,style,sizeof(TextStyle_t));
 }
 
