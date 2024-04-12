@@ -34,6 +34,7 @@ target_link_libraries(test_init_easysdl SDL2 SDL2_image SDL2_ttf)
 add_executable(demo_menu
         src/easy_sdl.cpp
         src/easy_menu.cpp
+        main.cpp
 )
 target_link_libraries(demo_menu SDL2 SDL2_image SDL2_ttf)
 
