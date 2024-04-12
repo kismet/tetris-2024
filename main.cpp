@@ -11,8 +11,7 @@
 #include "include/tetris.h"
 
 
-#define SDL_MAIN_HANDLED // avoid  "undefined reference to 'WinMain'"
-
+#define SDL_MAIN_HANDLED //avoid  "undefined reference to 'WinMain'"
 using namespace std;
 
 static int cx = 0;
@@ -229,6 +228,7 @@ void menu(SDL_Event* e){
                 }
                 break;
         }
+    }
 }
 
 
