@@ -1,17 +1,15 @@
 //Using SDL and standard IO
+#define SDL_MAIN_HANDLED //avoid  "undefined reference to 'WinMain'"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
 #include <iostream>
-#include <cstdlib>
-#include <ctime>
 
 #include "include/easy_sdl.h"
 #include "include/tetris.h"
 
 
-#define SDL_MAIN_HANDLED //avoid  "undefined reference to 'WinMain'"
 using namespace std;
 
 static int cx = 0;
@@ -27,7 +25,8 @@ static int SPRITE_HEIGHT = 256;
 static const float fallSpeed = 50;
 
 //TODO Funzione che inizializza il mondo
-static int points = 0;static char world[WORLD_HEIGHT][WORLD_WIDTH];
+static int points = 0;
+static char world[WORLD_HEIGHT][WORLD_WIDTH];
 static int topScore = 0;
 static int level = 1;
 static int nextBlock  = -1;

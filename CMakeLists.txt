@@ -23,7 +23,6 @@ add_executable(test_asset_easysdl
 )
 target_link_libraries(test_asset_easysdl SDL2 SDL2_image SDL2_ttf)
 
-
 add_executable(test_init_easysdl
         test/easy_sdl_init.cpp
         src/easy_sdl.cpp
@@ -43,3 +42,10 @@ add_executable(first_demo
         src/testris_asset.cpp
 )
 target_link_libraries(first_demo SDL2 SDL2_image SDL2_ttf)
+
+add_executable(tetris
+        main.cpp
+        src/game_engine.cpp
+        src/easy_sdl.cpp
+)
+target_link_libraries(tetris SDL2 SDL2_image SDL2_ttf)
