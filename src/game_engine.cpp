@@ -313,3 +313,12 @@ void fallDown(int x, int y, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_W
 
     placeIt(y, x, shape, typeShape, world);
 }
+
+void initworld (char world [WORLD_HEIGHT][WORLD_WIDTH]) {
+    for (int i=0; i<WORLD_HEIGHT; i++){
+        for (int j=0; j<WORLD_WIDTH; j++){
+            world[i][j]= EMPTY_SPACE;
+        }
+    }
+}
+}
