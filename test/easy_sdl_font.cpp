@@ -13,6 +13,40 @@ char* assetsOrigin[] = {
         "assets/fonts/ka1.ttf"
 };
 
+TextStyle_t normal = {
+        .solid = true,
+        .size = 44,
+        .italic = false,
+        .underline = false,
+        .bold = false,
+        .strikethrough = false,
+        .font = null,
+        .foreground = {255, 0,255, 255}
+};
+
+TextStyle_t highlight = {
+        .solid = true,
+        .size = 44,
+        .italic = false,
+        .underline = false,
+        .bold = false,
+        .strikethrough = false,
+        .font = null,
+        .foreground = {255, 0,255, 255}
+};
+
+TextStyle_t gametext = {
+        .solid = true,
+        .size = 12,
+        .italic = false,
+        .underline = false,
+        .bold = false,
+        .strikethrough = false,
+        .font = null,
+        .foreground = {255, 0,255, 255}
+};
+
+
 Easy_Asset_t* assets[sizeof(assetsOrigin)/sizeof(char*)];
 
 
@@ -24,18 +58,11 @@ bool loadingAssets(){
             cerr<<"Failed to load assets located at "<<assetsOrigin[i]<<endl;
         }
     }
+    normal.font = assets[0];
+    highlight.font = assets[0];
+    gametext.font = assets[0];
 
-    TextStyle_t style = {
-            .solid = true,
-            .size = 18,
-            .italic = false,
-            .underline = false,
-            .bold = false,
-            .strikethrough = false,
-            .font = assets[0],
-            .foreground = {255, 0,255, 255}
-    };
-    setTextStyle(&style);
+    setTextStyle(&normal);
     return true;
 }
 
