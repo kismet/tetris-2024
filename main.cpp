@@ -54,6 +54,9 @@ void game(SDL_Event*);
 bool loadAssets(SDL_Renderer* render);
 void (*gestore_eventi)(SDL_Event *) = &menu;
 
+
+//TODO Compleate questo elenco con TUTTI gli assets che useremo
+//IMPORTANTE: dare un ordine fisso agli assets
 char* assetsOrigin[]  = {
     "assets/fonts/ka1.ttf",
     "assets/blocchi/arancione.png",
@@ -181,7 +184,7 @@ void handleInput() {
     SDL_Event e;
 
     while (SDL_PollEvent(&e) != 0) {
-        if (e.type == SDL_QUIT) {
+        if(e.type == SDL_QUIT){
             closeSDL();
             exit(0);
         }else{
@@ -201,31 +204,31 @@ void menu(SDL_Event* e){
         exit(0);
     } else if (e->type == SDL_KEYDOWN) {
         switch (e->key.keysym.sym) {
-                case SDLK_UP:
-                    selectedOption = (selectedOption - 1 + MENU_OPTIONS_COUNT) % MENU_OPTIONS_COUNT;
-                    break;
-                case SDLK_DOWN:
-                    selectedOption = (selectedOption + 1) % MENU_OPTIONS_COUNT;
-                    break;
-                case SDLK_RETURN:
-                    switch (selectedOption) {
-                        case 0:
-                            cout << "Starting the game..." << endl;
-                            gestore_eventi = &game;
-                            break;
-                        case 1:
-                            cout << "Resume menu..." << endl;
-                            gestore_eventi = &menu;
-                            break;
-                        case 2:
-                            exit(0);
-                            break;
-                        default:
+            case SDLK_UP:
+                selectedOption = (selectedOption - 1 + MENU_OPTIONS_COUNT) % MENU_OPTIONS_COUNT;
+                break;
+            case SDLK_DOWN:
+                selectedOption = (selectedOption + 1) % MENU_OPTIONS_COUNT;
+                break;
+            case SDLK_RETURN:
+                switch (selectedOption) {
+                    case 0:
+                        cout << "Starting the game..." << endl;
+                        gestore_eventi = &game;
+                        break;
+                    case 1:
+                        cout << "Resume menu..." << endl;
+                        gestore_eventi = &menu;
+                        break;
+                    case 2:
+                        exit(0);
+                        break;
+                    default:
 
                         break;
-                    }
-                    break;
-            }
+                }
+                break;
+        }
 }
 
 
