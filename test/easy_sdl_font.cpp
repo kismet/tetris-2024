@@ -20,7 +20,7 @@ TextStyle_t normal = {
         .underline = false,
         .bold = false,
         .strikethrough = false,
-        .font = null,
+        .font = NULL,
         .foreground = {255, 0,255, 255}
 };
 
@@ -31,7 +31,7 @@ TextStyle_t highlight = {
         .underline = false,
         .bold = false,
         .strikethrough = false,
-        .font = null,
+        .font = NULL,
         .foreground = {255, 0,255, 255}
 };
 
@@ -42,7 +42,7 @@ TextStyle_t gametext = {
         .underline = false,
         .bold = false,
         .strikethrough = false,
-        .font = null,
+        .font = NULL,
         .foreground = {255, 0,255, 255}
 };
 
