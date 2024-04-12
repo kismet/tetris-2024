@@ -1,17 +1,23 @@
 #include <iostream>
-//#include "../include/shape.h"
-//#include "../include/game_engine.h"
 #include "../include/tetris.h"
+
+//TODO modificare '*' con indice dell'assets da usare per la visualizzazione
+//TODO verificare che il VUOTO sia ' ' nel MONDO e non ZERO e non UNO
+//TODO struct per Player (che in realtà è tra i file della directory test)
+//TODO struct per informazioni del Gioco (punti, difficoltà, velocità, top score, etc.)
+//TODO aggiornare le funzioni deleteLine per punti ed eventualmente velocità
+//TODO funzione per upgradeLevel controlla il numero di linee o punteggio e aumenta velocità
+//TODO funzione updateScore invocata da deleteLine e da placeIt che aggiorna il punteggio
+
 
 
 char blocks[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH] = {
         //I
         {
-             {
+             {{'*',' ',' ',' '},
                 {'*',' ',' ',' '},
-                {'*',' ',' ',' '},
-                {'*',' ',' ',' '},
-                {'*',' ',' ',' '},
+                {'3',' ',' ',' '},
+                {'1',' ',' ',' '},
             },
             {
                 {'*',' ',' ',' '},
@@ -204,7 +210,7 @@ char blocks[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH] = {
         }
 };
 
-
+//TODO Remove this function
 void stampa(char Mat[][SHAPE_HEIGHT][SHAPE_WIDTH], const int MAX){
     for(int k = 0; k < MAX; k++){
         for(int i = 0; i < SHAPE_HEIGHT; i++){
@@ -252,10 +258,10 @@ void placeIt(int y,int x, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WID
              char world[WORLD_HEIGHT][WORLD_WIDTH]){
     for(int i = 0; i < SHAPE_HEIGHT; i++){
         for(int j = 0; j < SHAPE_WIDTH; j++){
-            if (shape[N_BLOCKS][typeShape][i][j] == '*') {
+            if (shape[N_BLOCKS][typeShape][i][j] != ' ') {
                 int worldX = x + j;
                 int worldY = y + i;
-                world[worldY][worldX] = '*';
+                world[worldY][worldX] = shape[N_BLOCKS][typeShape][i][j];
             }
         }
     }
@@ -279,7 +285,7 @@ bool isLineComplete(int line, char world[WORLD_HEIGHT][WORLD_WIDTH]){
     bool isComplete = true;
     int i = 0;
     while(i < WORLD_WIDTH && isComplete){
-        if(world[line][i] != '1'){
+        if(world[line][i] != ' '){
             isComplete = false;
         }
         i++;
@@ -294,7 +300,7 @@ void deleteLine(int line, char world[WORLD_HEIGHT][WORLD_WIDTH]){
         }
     }
     for(int j = 0; j < WORLD_WIDTH; j++) {
-        world[0][j] = '0';
+        world[0][j] = ' ';
     }
 }
 
