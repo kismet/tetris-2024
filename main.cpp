@@ -193,6 +193,7 @@ void handleInput() {
 
 void game(SDL_Event* e){
     cout << "Test game" << endl;
+    gestore_eventi = &menu;
 }
 
 
@@ -204,6 +205,12 @@ void menu(SDL_Event* e){
         switch (e->key.keysym.sym) {
             case SDLK_UP:
                 selectedOption = (selectedOption - 1 + MENU_OPTIONS_COUNT) % MENU_OPTIONS_COUNT;
+                break;
+            case SDLK_w:
+                selectedOption = (selectedOption - 1 + MENU_OPTIONS_COUNT) % MENU_OPTIONS_COUNT;
+                break;
+            case SDLK_s:
+                 selectedOption = (selectedOption + 1) % MENU_OPTIONS_COUNT;
                 break;
             case SDLK_DOWN:
                 selectedOption = (selectedOption + 1) % MENU_OPTIONS_COUNT;
