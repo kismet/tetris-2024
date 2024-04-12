@@ -184,8 +184,23 @@ void handleInput() {
         if (e.type == SDL_QUIT) {
             closeSDL();
             exit(0);
-        } else if (e.type == SDL_KEYDOWN) {
-            switch (e.key.keysym.sym) {
+        }else{
+            gestore_eventi(&e);
+        }
+    }
+}
+
+void game(SDL_Event* e){
+    cout << "Test game" << endl;
+}
+
+
+void menu(SDL_Event* e){
+    if (e->type == SDL_QUIT) {
+        closeSDL();
+        exit(0);
+    } else if (e->type == SDL_KEYDOWN) {
+        switch (e->key.keysym.sym) {
                 case SDLK_UP:
                     selectedOption = (selectedOption - 1 + MENU_OPTIONS_COUNT) % MENU_OPTIONS_COUNT;
                     break;
@@ -211,18 +226,6 @@ void handleInput() {
                     }
                     break;
             }
-
-        }
-    }
-}
-
-void game(SDL_Event* event){
-    cout << "Test game" << endl;
-}
-
-
-void menu(SDL_Event* event){
-    cout << "Test menu";
 }
 
 
