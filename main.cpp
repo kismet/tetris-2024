@@ -4,268 +4,275 @@
 #include <SDL_ttf.h>
 
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
-#include "include/config.h"
-#include "include/tetris_asset.h"
 #include "include/easy_sdl.h"
+#include "include/tetris.h"
 
 
 #define SDL_MAIN_HANDLED // avoid  "undefined reference to 'WinMain'"
 
 using namespace std;
 
-bool init();
-void kill();
-bool load();
-bool loop();
+static int cx = 0;
+static int cy = 0;
+static unsigned int idxBlock = 0;
+static int angle = 0;
 
-// Variables to hold our window and surfaces
-SDL_Window* window;
-SDL_Renderer* mainRenderer;
-SDL_Texture* block;
-TTF_Font* mainFont;
+static int score = 0;
 
-int cx = 0;
-int cy = 0;
-int SPRITE_WIDTH = 256;
-int SPRITE_HEIGHT = 256;
-int angle = 0;
+static int SPRITE_WIDTH = 256;
+static int SPRITE_HEIGHT = 256;
+
+static const float fallSpeed = 50;
+
+static char world[WORLD_HEIGHT][WORLD_WIDTH] = {
+                {'0','0','0','0','0','0','0','0','0','0'},
+                {'0','0','0','0','0','0','0','0','0','0'},
+                {'0','0','0','0','0','0','0','0','0','0'},
+                {'0','0','0','0','0','0','0','0','0','0'},
+                {'0','0','0','0','0','0','0','0','0','0'},
+                {'0','0','0','0','0','0','0','0','0','0'},
+                {'0','0','0','0','0','0','0','0','0','0'},
+                {'0','0','0','0','0','0','0','0','0','0'},
+                {'0','0','0','0','0','0','0','0','0','0'},
+                {'0','0','0','0','0','0','0','0','0','0'},
+                {'0','0','0','0','0','0','0','0','0','0'},
+                {'0','0','0','0','0','0','0','0','0','0'},
+                {'0','0','0','0','0','0','0','0','0','0'},
+                {'0','0','0','0','0','0','0','0','0','0'},
+                {'0','0','0','0','0','0','0','0','0','0'},
+                {'0','0','0','0','0','0','0','0','0','0'},
+                {'0','0','0','0','0','0','0','0','0','0'},
+                {'0','0','0','0','0','0','0','0','0','0'},
+                {'0','0','0','0','0','0','0','0','0','0'},
+                {'0','0','0','0','0','1','0','0','0','0'},
+                {'0','0','0','0','0','1','0','0','0','0'},
+                {'1','0','1','0','0','1','0','0','0','0'},
+                {'1','1','1','1','1','1','1','1','0','0'},
+                {'1','1','1','1','1','1','1','1','1','1'},
+        };
+static int points = 0;
+static int topScore = 0;
+static int level = 1;
+static int nextBlock  = -1;
 
 
-using namespace std;
+const int SCREEN_WIDTH = 1400;
+const int SCREEN_HEIGHT = 938;
 
-int main_loading_assets(int argc, char** args);
+SDL_Window* window = NULL;
+SDL_Renderer* renderer = NULL;
+TTF_Font* font = NULL;
+TTF_Font* fontRules = NULL;
+SDL_Texture* backgroundTexture = NULL;
 
-void loadBlock(){
-    block = IMG_LoadTexture(mainRenderer,"assets/blocks/J2.png");
-    if( !block ){
-        cout << "Error creating texture: " << SDL_GetError() << endl;
-        system("pause");
-        return ;
+const int MENU_OPTIONS_COUNT = 3;
+const string MENU_OPTIONS[MENU_OPTIONS_COUNT] = {"Start Game", "Resume", "Quit"};
+
+int selectedOption = 0;
+
+void menu(SDL_Event*);
+void game(SDL_Event*);
+
+bool loadAssets(SDL_Renderer* render);
+void (*gestore_eventi)(SDL_Event *) = &menu;
+
+char* assetsOrigin[]  = {
+    "assets/fonts/ka1.ttf",
+    "assets/blocchi/arancione.png",
+    "assets/blocchi/blu.png",
+    "assets/blocchi/giallo.png",
+    "assets/blocchi/rosa.png",
+    "assets/blocchi/rosso.png",
+    "assets/blocchi/verde.png",
+    "assets/blocchi/viola.png",
+    "assets/grafica/pausa1.png",
+};
+
+Easy_Asset_t* assets[sizeof(assetsOrigin)/sizeof(char*)];
+
+
+
+bool initSDL() {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        cout << "SDL initialization failed: " << SDL_GetError() << endl;
+        return false;
+    }
+
+    window = SDL_CreateWindow(
+                              "Tetris - 3AI",
+                              SDL_WINDOWPOS_CENTERED,
+                              SDL_WINDOWPOS_CENTERED,
+                              SCREEN_WIDTH, SCREEN_HEIGHT,
+                              SDL_WINDOW_SHOWN);
+
+    if (window == NULL) {
+        cout << "Window creation failed: " << SDL_GetError() << endl;
+        return false;
+    }
+
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if (renderer == NULL) {
+        cout << "Renderer creation failed: " << SDL_GetError() << endl;
+        return false;
+    }
+
+    if (TTF_Init() == -1) {
+        cout << "SDL_ttf initialization failed: " << TTF_GetError() << endl;
+        return false;
+    }
+
+    font = TTF_OpenFont("assets/fonts/ka1.ttf", 42);
+    fontRules = TTF_OpenFont("assets/fonts/Noteworthy.ttc", 48);
+
+    if(fontRules == NULL) {
+        cout << "Font loading failded: " << TTF_GetError() << endl;
+        return false;
+    }
+
+    if (font == NULL) {
+        cout << "Font loading failed: " << TTF_GetError() << endl;
+        return false;
+    }
+
+    return true;
+}
+
+void closeSDL() {
+    SDL_DestroyTexture(backgroundTexture);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    TTF_CloseFont(font);
+    TTF_Quit();
+    SDL_Quit();
+}
+
+SDL_Texture* loadTexture(const string& filePath) {
+    SDL_Surface* surface = IMG_Load(filePath.c_str());
+    if (surface == NULL) {
+        cout << "Unable to load image " << filePath << ". Error: " << IMG_GetError() << endl;
+        return NULL;
+    }
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+    return texture;
+}
+
+void renderText(const string& text, int x, int y, bool selected = false) {
+    SDL_Color color = {255, 255, 255};
+    if (selected) {
+        color = {255, 0, 0};
+    }
+    SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+    int width = surface->w;
+    int height = surface->h;
+    SDL_FreeSurface(surface);
+
+    SDL_Rect destRect = {x - width / 2, y - height / 2, width, height};
+    SDL_RenderCopy(renderer, texture, NULL, &destRect);
+
+    SDL_DestroyTexture(texture);
+}
+
+void drawMenu() {
+    // Clear the screen
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
+    // Draw the background image
+    SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
+
+
+    // Draw menu options
+    int startY = (SCREEN_HEIGHT - MENU_OPTIONS_COUNT ) / 2;
+    for (int i = 0; i < MENU_OPTIONS_COUNT; ++i) {
+        int x = SCREEN_WIDTH / 2;
+        int y = startY + i * 100;
+        bool isSelected = (i == selectedOption);
+        renderText(MENU_OPTIONS[i], x, y, isSelected);
+    }
+
+    // Update the screen
+    SDL_RenderPresent(renderer);
+}
+
+
+
+void handleInput() {
+    SDL_Event e;
+
+    while (SDL_PollEvent(&e) != 0) {
+        if (e.type == SDL_QUIT) {
+            closeSDL();
+            exit(0);
+        } else if (e.type == SDL_KEYDOWN) {
+            switch (e.key.keysym.sym) {
+                case SDLK_UP:
+                    selectedOption = (selectedOption - 1 + MENU_OPTIONS_COUNT) % MENU_OPTIONS_COUNT;
+                    break;
+                case SDLK_DOWN:
+                    selectedOption = (selectedOption + 1) % MENU_OPTIONS_COUNT;
+                    break;
+                case SDLK_RETURN:
+                    switch (selectedOption) {
+                        case 0:
+                            cout << "Starting the game..." << endl;
+                            gestore_eventi = &game;
+                            break;
+                        case 1:
+                            cout << "Resume menu..." << endl;
+                            gestore_eventi = &menu;
+                            break;
+                        case 2:
+                            exit(0);
+                            break;
+                        default:
+
+                        break;
+                    }
+                    break;
+            }
+
+        }
     }
 }
+
+void game(SDL_Event* event){
+    cout << "Test game" << endl;
+}
+
+
+void menu(SDL_Event* event){
+    cout << "Test menu";
+}
+
 
 int main(int argc, char** args) {
-    exit(main_loading_assets(argc,args));
-    return 0;
-    if ( initEasySDL("TETRIS 2024", SCREEN_HEIGHT, SCREEN_WIDTH, 0) == false ){
-        return 0;
+
+
+    if (!initSDL()) {
+        cout << "SDL initialization failed!" << endl;
+        return 1;
     }
-    loadAssets(NULL);
-    SDL_Event e;
 
-    SDL_Rect rect;
-    rect.w = SPRITE_WIDTH;
-    rect.h = SPRITE_HEIGHT;
-    rect.x = cx;
-    rect.y = cy;
+    backgroundTexture = loadTexture("assets/grafica/pausa_new_1.png");
+    if (backgroundTexture == NULL) {
+        closeSDL();
+        return 1;
+    }
 
-    SDL_Color textColor;
-    textColor.a = 200;
-    textColor.b = textColor.g = textColor.r = 100;
-    textColor.r = 255;
-    SDL_Surface* text = TTF_RenderText_Solid(mainFont, "This is T E T R I S", textColor);
-    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(getSDLRender(),text);
+    bool quit = false;
 
-    mainRenderer = getSDLRender();
-    t_image* blocks = getAssets();
-    int idxBlock = 0;
-    int const NBLOCK = sizeof(blocks)/sizeof(t_image);
-    cout<<NBLOCK<<endl;
-    cout<<blocks[0].origin<<endl;
-
-    while( SDL_PollEvent( &e ) != 0 ) {
-        switch (e.type) {
-            case SDL_QUIT:
-                return false;
-            case SDL_KEYDOWN:
-                switch(e.key.keysym.sym){
-                    case SDLK_w: cy -= 5; break;
-                    case SDLK_s: cy +=5; break;
-                    case SDLK_a: cx -=5; break;
-                    case SDLK_d: cx +=5; break;
-                    case SDLK_q: angle +=-90; break;
-                    case SDLK_e: angle +=90; break;
-//                    case SDLK_PLUS: idxBlock =  (idxBlock + 1 ) % NBLOCK; break;
-//                    case SDLK_MINUS: idxBlock =  (idxBlock - 1 ) % NBLOCK; break;
-                }
-            case SDL_KEYUP:
-                break;
-            case SDL_MOUSEMOTION:
-                break;
-        }
-        SDL_SetRenderDrawColor(
-                mainRenderer,
-                0xFF, 0xFF, 0xFF, 0xFF
-        );
-        SDL_RenderClear(mainRenderer);
-        SDL_SetRenderDrawColor(
-                mainRenderer,
-                0xA0, 0xA0, 0xA0, 0xFF
-        );
-        cout<<"Presenting "<<blocks[idxBlock].loaded<<" "<<blocks[idxBlock].origin<<endl;
-        cout<<SDL_GetError();
-        //SDL_RenderCopy(mainRenderer, block, NULL, &rect);
-        SDL_RenderCopyEx(mainRenderer, blocks[idxBlock].texture, NULL, &rect,
-                         angle, NULL, SDL_FLIP_NONE);
-        SDL_Rect textBox;
-        textBox.x = textBox.y = 0;
-        textBox.w = 200;
-        textBox.h = 18;
-//        SDL_RenderCopy(getSDLRender(), textTexture, NULL, &textBox);
-        /*
-        SDL_RenderFillRect(
-                mainRenderer,
-                &rect
-        );
-         */
-        cout<<rect.h<<" "<<rect.w<<" "<<rect.x<<" "<<rect.y<<endl;
-
-        SDL_RenderPresent(getSDLRender());
+    while (!quit) {
+        handleInput();
+        drawMenu();
         SDL_Delay(10);
     }
 
-}
-
-
-int main_old(int argc, char** args) {
-
-    if ( !init() ) return 1;
-
-    if ( !load() ) return 1;
-
-
-    while ( loop() ) {
-        // wait before processing the next frame
-        SDL_Delay(10);
-    }
-
-    kill();
+    closeSDL();
     return 0;
-}
-
-bool loop() {
-
-    SDL_Event e;
-
-    SDL_Rect rect;
-    rect.w = SPRITE_WIDTH;
-    rect.h = SPRITE_HEIGHT;
-    rect.x = cx;
-    rect.y = cy;
-
-    SDL_Color textColor;
-    textColor.a = 200;
-    textColor.b = textColor.g = textColor.r = 100;
-    textColor.r = 255;
-    SDL_Surface* text = TTF_RenderText_Solid(mainFont, "This is T E T R I S", textColor);
-    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(mainRenderer,text);
-    while( SDL_PollEvent( &e ) != 0 ) {
-        switch (e.type) {
-            case SDL_QUIT:
-                return false;
-            case SDL_KEYDOWN:
-                switch(e.key.keysym.sym){
-                    case SDLK_w: cy -= 5; break;
-                    case SDLK_s: cy +=5; break;
-                    case SDLK_a: cx -=5; break;
-                    case SDLK_d: cx +=5; break;
-                    case SDLK_q: angle +=-90; break;
-                    case SDLK_e: angle +=90; break;
-                }
-            case SDL_KEYUP:
-                break;
-            case SDL_MOUSEMOTION:
-                break;
-        }
-        SDL_SetRenderDrawColor(
-                mainRenderer,
-                0xFF, 0xFF, 0xFF, 0xFF
-        );
-        SDL_RenderClear(mainRenderer);
-        SDL_SetRenderDrawColor(
-                mainRenderer,
-                0xA0, 0xA0, 0xA0, 0xFF
-        );
-        //SDL_RenderCopy(mainRenderer, block, NULL, &rect);
-        SDL_RenderCopyEx(mainRenderer, block, NULL, &rect,
-                         angle, NULL, SDL_FLIP_NONE);
-        SDL_Rect textBox;
-        textBox.x = textBox.y = 0;
-        textBox.w = 200;
-        textBox.h = 18;
-        SDL_RenderCopy(mainRenderer, textTexture, NULL, &textBox);
-        /*
-        SDL_RenderFillRect(
-                mainRenderer,
-                &rect
-        );
-         */
-        cout<<rect.h<<" "<<rect.w<<" "<<rect.x<<" "<<rect.y<<endl;
-
-        SDL_RenderPresent(mainRenderer);
-    }
-
-
-
-    return true;
-}
-
-bool load() {
-    loadBlock();
-
-    mainFont = TTF_OpenFont("assets/fonts/ka1.ttf", 26);
-    if( mainFont == NULL ) {
-        cout << "Error loading Font: " << TTF_GetError() << endl;
-        system("pause");
-        return false;
-    }
-
-    return true;
-}
-
-bool init() {
-    // See last example for comments
-    if ( SDL_Init( SDL_INIT_EVERYTHING ) < 0 ) {
-        cout << "Error initializing SDL: " << SDL_GetError() << endl;
-        system("pause");
-        return false;
-    }
-
-    if ( TTF_Init() < 0 ){
-        cout << "Error initializing TTF Failed: " << TTF_GetError() << endl;
-        system("pause");
-        return false;
-    }
-
-    if ( IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) < 0 ) {
-        cout << "Error initializing SDL Image: " << IMG_GetError() << endl;
-        system("pause");
-        return false;
-    };
-
-    window = SDL_CreateWindow( "TETRIS 2024", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                               SCREEN_HEIGHT, SCREEN_WIDTH, SDL_WINDOW_RESIZABLE );
-//                               SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS | SDL_WINDOW_RESIZABLE);
-    if ( !window ) {
-        cout << "Error creating window: " << SDL_GetError()  << endl;
-        system("pause");
-        return false;
-    }
-
-    mainRenderer = SDL_CreateRenderer( window, -1 , SDL_RENDERER_ACCELERATED );
-    if ( !mainRenderer ) {
-        cout << "Error getting renderer: " << SDL_GetError() << endl;
-        system("pause");
-        return false;
-    }
-    return true;
-}
-
-void kill() {
-    SDL_SetRenderDrawColor( mainRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
-    SDL_RenderClear( mainRenderer );
-    // Quit
-    SDL_DestroyWindow( window );
-    SDL_Quit();
 }
