@@ -288,6 +288,10 @@ void drawText(uint16_t x, uint16_t y, char* txt){
 void drawText(uint16_t x, uint16_t y, uint16_t w, uint16_t h, char* txt, uint32_t options){
     SDL_Surface* text;
     //TODO Set all the font style, at the moment only the color is set
+    if ( context.text_style == NULL || context.text_style->font == NULL ){
+        cerr << "No valid TEXT STYLE SET, we cannot write text";
+        return;
+    }
     TTF_Font* font = context.text_style->font->detail.font.font;
     text = TTF_RenderText_Solid(font, txt, context.text_style->foreground );
     if ( !text ) {
