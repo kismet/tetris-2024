@@ -22,15 +22,15 @@ static int score = 0;
 static int SPRITE_WIDTH = 256;
 static int SPRITE_HEIGHT = 256;
 
-static const float fallSpeed = 50;
+static int MaxFallSpeed = 1000;
 
-//TODO Funzione che inizializza il mondo
 typedef struct Player_Data {
     int x;
     int y;
     int rotation;
     Easy_Asset_t* piece;
     int assetIdx;
+    int score = 0;
 } Player_Data_t;
 
 typedef struct World_Data {
@@ -38,7 +38,8 @@ typedef struct World_Data {
     int topScore = 0;
     int level = 1;
     int nextBlock  = -1;
-    const float fallSpeed = 50;
+    int fallSpeed = 50;
+
 } World_Data_t;
 
 static char world[WORLD_HEIGHT][WORLD_WIDTH];
@@ -75,7 +76,7 @@ char* assetsOrigin[]  = {
     "assets/blocchi/rosso.png",
     "assets/blocchi/verde.png",
     "assets/blocchi/viola.png",
-    "assets/grafica/pausa1.png",
+    "assets/grafica/pausa_new_1.png",
 };
 
 Easy_Asset_t* assets[sizeof(assetsOrigin)/sizeof(char*)];
@@ -251,7 +252,6 @@ void menu(SDL_Event* e){
 
 int main(int argc, char** args) {
 
-
     if (!initSDL()) {
         cout << "SDL initialization failed!" << endl;
         return 1;
@@ -271,6 +271,4 @@ int main(int argc, char** args) {
         SDL_Delay(10);
     }
 
-    closeSDL();
-    return 0;
 }
