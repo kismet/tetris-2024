@@ -311,6 +311,7 @@ void drawText(uint16_t x, uint16_t y, uint16_t w, uint16_t h, char* txt, uint32_
         return;
     }
     TTF_Font* font = context.text_style->font->detail.font.font;
+    TTF_SetFontSize(font,context.text_style->size);
     text = TTF_RenderText_Solid(font, txt, context.text_style->foreground );
     if ( !text ) {
         cout << "Failed to render text: " << TTF_GetError() << endl;
