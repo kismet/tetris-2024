@@ -19,10 +19,31 @@ static int angle = 0;
 
 static int score = 0;
 
-static int SPRITE_WIDTH = 256;
-static int SPRITE_HEIGHT = 256;
-
 static const float fallSpeed = 50;
+
+TextStyle_t normal = {
+        .solid = true,
+        .size = 44,
+        .italic = false,
+        .underline = false,
+        .bold = false,
+        .strikethrough = false,
+        .font = NULL,
+        .foreground = {255, 0,255, 255}
+};
+
+TextStyle_t highlight = {
+        .solid = true,
+        .size = 44,
+        .italic = false,
+        .underline = false,
+        .bold = false,
+        .strikethrough = false,
+        .font = NULL,
+        .foreground = {255, 0,255, 255}
+};
+
+
 
 //TODO Funzione che inizializza il mondo
 typedef struct Player_Data {
@@ -32,6 +53,8 @@ typedef struct Player_Data {
     Easy_Asset_t* piece;
     int assetIdx;
 } Player_Data_t;
+
+
 
 typedef struct World_Data {
     int points = 0;
@@ -53,7 +76,7 @@ TTF_Font* fontRules = NULL;
 SDL_Texture* backgroundTexture = NULL;
 
 const int MENU_OPTIONS_COUNT = 3;
-const string MENU_OPTIONS[MENU_OPTIONS_COUNT] = {"Start Game", "Resume", "Quit"};
+char* MENU_OPTIONS[MENU_OPTIONS_COUNT] = {"Start Game", "Resume", "Quit"};
 
 int selectedOption = 0;
 
@@ -63,6 +86,10 @@ void game(SDL_Event*);
 bool loadAssets(SDL_Renderer* render);
 void (*gestore_eventi)(SDL_Event *) = &menu;
 
+
+char* FONT_PATH = "assets/fonts/ka1.ttf";
+char* IMAGE_MENU_BACKGROUND = ""; //TODO Set the right path;
+char* IMAGE_GAME_BACKGROUND = ""; //TODO Set the right path;
 
 //TODO Compleate questo elenco con TUTTI gli assets che useremo
 //IMPORTANTE: dare un ordine fisso agli assets
@@ -75,104 +102,28 @@ char* assetsOrigin[]  = {
     "assets/blocchi/rosso.png",
     "assets/blocchi/verde.png",
     "assets/blocchi/viola.png",
-    "assets/grafica/pausa1.png",
+    "assets/grafica/pausa_new_1.png"
 };
+const int N_ASSETS = sizeof(assetsOrigin)/sizeof(char*);
+Easy_Asset_t* assets[N_ASSETS];
 
-Easy_Asset_t* assets[sizeof(assetsOrigin)/sizeof(char*)];
-
-
-
-bool initSDL() {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        cout << "SDL initialization failed: " << SDL_GetError() << endl;
-        return false;
-    }
-
-    window = SDL_CreateWindow(
-                              "Tetris - 3AI",
-                              SDL_WINDOWPOS_CENTERED,
-                              SDL_WINDOWPOS_CENTERED,
-                              SCREEN_WIDTH, SCREEN_HEIGHT,
-                              SDL_WINDOW_SHOWN);
-
-    if (window == NULL) {
-        cout << "Window creation failed: " << SDL_GetError() << endl;
-        return false;
-    }
-
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if (renderer == NULL) {
-        cout << "Renderer creation failed: " << SDL_GetError() << endl;
-        return false;
-    }
-
-    if (TTF_Init() == -1) {
-        cout << "SDL_ttf initialization failed: " << TTF_GetError() << endl;
-        return false;
-    }
-
-    font = TTF_OpenFont("assets/fonts/ka1.ttf", 42);
-    fontRules = TTF_OpenFont("assets/fonts/Noteworthy.ttc", 48);
-
-    if(fontRules == NULL) {
-        cout << "Font loading failded: " << TTF_GetError() << endl;
-        return false;
-    }
-
-    if (font == NULL) {
-        cout << "Font loading failed: " << TTF_GetError() << endl;
-        return false;
-    }
-
-    return true;
-}
-
-void closeSDL() {
-    SDL_DestroyTexture(backgroundTexture);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    TTF_CloseFont(font);
-    TTF_Quit();
-    SDL_Quit();
-}
-
-SDL_Texture* loadTexture(const string& filePath) {
-    SDL_Surface* surface = IMG_Load(filePath.c_str());
-    if (surface == NULL) {
-        cout << "Unable to load image " << filePath << ". Error: " << IMG_GetError() << endl;
-        return NULL;
-    }
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_FreeSurface(surface);
-    return texture;
-}
-
-void renderText(const string& text, int x, int y, bool selected = false) {
-    SDL_Color color = {255, 255, 255};
-    if (selected) {
-        color = {255, 0, 0};
-    }
-    SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-
-    int width = surface->w;
-    int height = surface->h;
-    SDL_FreeSurface(surface);
-
-    SDL_Rect destRect = {x - width / 2, y - height / 2, width, height};
-    SDL_RenderCopy(renderer, texture, NULL, &destRect);
-
-    SDL_DestroyTexture(texture);
-}
 
 void drawMenu() {
+    /*
     // Clear the screen
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
     // Draw the background image
     SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
-
+    */
+    Easy_Asset_t *asset = NULL;
+    cout<<"Loading assets"<<endl;
+    //asset = loadAsset("assets/grafica/pausa_new_1.png");
+    cout<<"Loaded assets"<<endl;
+    drawAsset(0,0, asset);
+    cout<<"Drawn assets"<<endl;
+    return;
 
     // Draw menu options
     int startY = (SCREEN_HEIGHT - MENU_OPTIONS_COUNT ) / 2;
@@ -180,11 +131,16 @@ void drawMenu() {
         int x = SCREEN_WIDTH / 2;
         int y = startY + i * 100;
         bool isSelected = (i == selectedOption);
-        renderText(MENU_OPTIONS[i], x, y, isSelected);
+        drawText(
+                (uint16_t ) x,(uint16_t ) y,
+                (uint16_t ) SCREEN_WIDTH, (uint16_t ) 50,
+                MENU_OPTIONS[i], TEXT_CENTERED
+        );
+        //renderText(MENU_OPTIONS[i], x, y, isSelected);
     }
 
     // Update the screen
-    SDL_RenderPresent(renderer);
+    //SDL_RenderPresent(renderer);
 }
 
 
@@ -194,7 +150,6 @@ void handleInput() {
 
     while (SDL_PollEvent(&e) != 0) {
         if(e.type == SDL_QUIT){
-            closeSDL();
             exit(0);
         }else{
             gestore_eventi(&e);
@@ -210,7 +165,6 @@ void game(SDL_Event* e){
 
 void menu(SDL_Event* e){
     if (e->type == SDL_QUIT) {
-        closeSDL();
         exit(0);
     } else if (e->type == SDL_KEYDOWN) {
         switch (e->key.keysym.sym) {
@@ -249,28 +203,35 @@ void menu(SDL_Event* e){
 }
 
 
+bool loadingAssets() {
+    int len = sizeof(assets) / sizeof(Easy_Asset_t *);
+    for (int i = 0; i < len; i++) {
+        cout<<"Loading: "<<assetsOrigin[i]<<endl;
+        assets[i] = loadAsset(assetsOrigin[i]);
+        if (assets[i] == NULL) {
+            cerr << "Failed to load assets located at " << assetsOrigin[i] << endl;
+            cerr << "We have to close down the software " << endl;
+            exit(-1);
+        }
+    }
+    //normal.font = loadAsset(FONT_PATH);
+    //highlight.font = loadAsset(FONT_PATH);
+
+}
+
+
+
 int main(int argc, char** args) {
+    //1 - Creiamo l'ambiente
+    initEasySDL("Tetris 2024", SCREEN_WIDTH, SCREEN_HEIGHT,NULL);
+    loadingAssets();
+    cout<<"Loading completed"<<endl;
 
-
-    if (!initSDL()) {
-        cout << "SDL initialization failed!" << endl;
-        return 1;
-    }
-
-    backgroundTexture = loadTexture("assets/grafica/pausa_new_1.png");
-    if (backgroundTexture == NULL) {
-        closeSDL();
-        return 1;
-    }
-
-    bool quit = false;
-
-    while (!quit) {
+    while ( true ) {
         handleInput();
         drawMenu();
-        SDL_Delay(10);
+        SDL_Delay(1000);
     }
 
-    closeSDL();
     return 0;
 }
