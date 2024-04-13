@@ -75,7 +75,7 @@ char* assetsOrigin[]  = {
     "assets/blocchi/rosso.png",
     "assets/blocchi/verde.png",
     "assets/blocchi/viola.png",
-    "assets/grafica/pausa1.png",
+    "assets/grafica/pausa_new_1.png",
 };
 
 Easy_Asset_t* assets[sizeof(assetsOrigin)/sizeof(char*)];
