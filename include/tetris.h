@@ -39,6 +39,8 @@ void initworld(char world[WORLD_HEIGHT][WORLD_WIDTH]);
 
 void updateScore(int& currentScore, int lineCleared);
 
+void upgradeLevel(int currentScore,int&currentLevel, int& fallSpeed, int& MaxFallSpeed);
+
 
 #endif //PEZZITETRIS_SHAPE_H
 
