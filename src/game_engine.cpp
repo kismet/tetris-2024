@@ -3,12 +3,9 @@
 
 //TODO modificare '*' con indice dell'assets da usare per la visualizzazione
 //TODO verificare che il VUOTO sia ' ' nel MONDO e non ZERO e non UNO
-//TODO struct per Player (che in realtà è tra i file della directory test)
-//TODO struct per informazioni del Gioco (punti, difficoltà, velocità, top score, etc.)
 //TODO aggiornare le funzioni deleteLine per punti ed eventualmente velocità
 //TODO funzione per upgradeLevel controlla il numero di linee o punteggio e aumenta velocità
 //TODO funzione updateScore invocata da deleteLine e da placeIt che aggiorna il punteggio
-
 
 
 char blocks[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH] = {

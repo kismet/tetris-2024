@@ -25,12 +25,23 @@ static int SPRITE_HEIGHT = 256;
 static const float fallSpeed = 50;
 
 //TODO Funzione che inizializza il mondo
-static int points = 0;
-static char world[WORLD_HEIGHT][WORLD_WIDTH];
-static int topScore = 0;
-static int level = 1;
-static int nextBlock  = -1;
+typedef struct Player_Data {
+    int x;
+    int y;
+    int rotation;
+    Easy_Asset_t* piece;
+    int assetIdx;
+} Player_Data_t;
 
+typedef struct World_Data {
+    int points = 0;
+    int topScore = 0;
+    int level = 1;
+    int nextBlock  = -1;
+    const float fallSpeed = 50;
+} World_Data_t;
+
+static char world[WORLD_HEIGHT][WORLD_WIDTH];
 
 const int SCREEN_WIDTH = 1400;
 const int SCREEN_HEIGHT = 938;
