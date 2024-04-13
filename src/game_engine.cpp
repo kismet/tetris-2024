@@ -1,7 +1,6 @@
 #include <iostream>
 #include "../include/tetris.h"
 
-//TODO modificare '*' con indice dell'assets da usare per la visualizzazione
 //TODO verificare che il VUOTO sia ' ' nel MONDO e non ZERO e non UNO
 //TODO aggiornare le funzioni deleteLine per punti ed eventualmente velocità
 
@@ -224,10 +223,7 @@ bool isColliding(int y, int x, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAP
                 if (worldX < 0 || worldX >= WORLD_WIDTH || worldY < 0 || worldY >= WORLD_HEIGHT) {
                     collision = true;
                 }
-                if (world[worldY][worldX] == ' ' && shape[N_BLOCKS][typeShape][i][j] == '*') {
-                    collision = false;
-                }
-                else if(world[worldY][worldX] == ' ' && shape[N_BLOCKS][typeShape][i][j] == '*'){
+                if(world[worldY][worldX] != ' '){
                     collision = true;
                 }
             }
