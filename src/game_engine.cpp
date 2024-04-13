@@ -233,7 +233,8 @@ bool isColliding(int y, int x, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAP
 
 
 void placeIt(int y,int x, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
-             char world[WORLD_HEIGHT][WORLD_WIDTH]){
+             char world[WORLD_HEIGHT][WORLD_WIDTH], int& currentScore){
+
     for(int i = 0; i < SHAPE_HEIGHT; i++){
         for(int j = 0; j < SHAPE_WIDTH; j++){
             if (shape[N_BLOCKS][typeShape][i][j] != ' ') {
@@ -243,6 +244,17 @@ void placeIt(int y,int x, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WID
             }
         }
     }
+
+    int deletedLines = 0;
+
+    for(int i = 0; i < WORLD_HEIGHT; i++) {
+        if(isLineComplete(i, world)) {
+            deleteLine(i, world);
+            deletedLines++;
+        }
+    }
+    updateScore(currentScore, deletedLines);
+
 }
 
 bool isLineComplete(int line, char world[WORLD_HEIGHT][WORLD_WIDTH]){
@@ -269,13 +281,13 @@ void deleteLine(int line, char world[WORLD_HEIGHT][WORLD_WIDTH]){
 }
 
 void fallDown(int x, int y, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
-              char world[WORLD_HEIGHT][WORLD_WIDTH]) {
+              char world[WORLD_HEIGHT][WORLD_WIDTH], int& currentScore) {
 
     while (!isColliding(y + 1, x, shape, typeShape, world)) {
         y++;
     }
 
-    placeIt(y, x, shape, typeShape, world);
+    placeIt(y, x, shape, typeShape, world, currentScore);
 }
 
 void initworld(char** world){
