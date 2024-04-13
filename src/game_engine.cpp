@@ -4,8 +4,8 @@
 //TODO modificare '*' con indice dell'assets da usare per la visualizzazione
 //TODO verificare che il VUOTO sia ' ' nel MONDO e non ZERO e non UNO
 //TODO aggiornare le funzioni deleteLine per punti ed eventualmente velocità
+
 //TODO funzione per upgradeLevel controlla il numero di linee o punteggio e aumenta velocità
-//TODO funzione updateScore invocata da deleteLine e da placeIt che aggiorna il punteggio
 
 
 char blocks[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH] = {
@@ -208,19 +208,6 @@ char blocks[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH] = {
         }
 };
 
-//TODO Remove this function
-void stampa(char Mat[][SHAPE_HEIGHT][SHAPE_WIDTH], const int MAX){
-    for(int k = 0; k < MAX; k++){
-        for(int i = 0; i < SHAPE_HEIGHT; i++){
-            for (int j = 0; j < SHAPE_WIDTH; j++){
-                std::cout << Mat[k][i][j] << " ";
-            }
-            std::cout << std::endl;
-        }
-        std::cout << "---------------\n";
-    }
-}
-
 
 bool isColliding(int y, int x, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
                   char world[WORLD_HEIGHT][WORLD_WIDTH]){
@@ -241,7 +228,7 @@ bool isColliding(int y, int x, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAP
                 if (world[worldY][worldX] == ' ' && shape[N_BLOCKS][typeShape][i][j] == '*') {
                     collision = false;
                 }
-                else if(world[worldY][worldX] == '1' && shape[N_BLOCKS][typeShape][i][j] == '*'){
+                else if(world[worldY][worldX] == ' ' && shape[N_BLOCKS][typeShape][i][j] == '*'){
                     collision = true;
                 }
             }
@@ -263,8 +250,6 @@ void placeIt(int y,int x, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WID
             }
         }
     }
-    //TODO check if we have to delete line or lines and update score accordingly
-
 }
 
 /*
@@ -321,3 +306,11 @@ void initworld(char** world){
         }
     }
 }
+
+//TODO funzione updateScore invocata da deleteLine e da placeIt che aggiorna il punteggio
+void updateScore(int& currentScore, int lineCleared) {
+    int points[] = {100, 200, 400, 800};
+
+    currentScore += points[lineCleaned];
+}
+
