@@ -142,9 +142,14 @@ Easy_Asset_t* getAssetById(uint16_t id){
 Easy_Asset_t* loadAsset(char* path){
     Easy_Asset_t* t = isAssetAlreadyLoaded(path);
     if (t != NULL) return t;
+    cerr<<"The asset:"<<path<<endl;
+    cerr<<" is not part of our cache, we have to load it"<<endl;
+
 
     t = loadImage(path);
     if (t != NULL) return t;
+    cerr<<"We failed to load the file:"<<path<<endl;
+    cerr<<" as IMAGE we try as FONT"<<endl;
 
     t = loadFont(path);
     return t;
@@ -254,10 +259,23 @@ Easy_Asset_t* loadImage(char* path){
 }
 
 void drawAsset(uint16_t x, uint16_t y, Easy_Asset_t* asset,
-               uint16_t rotation, float scaling){
+               uint16_t rotation, float scaling) {
+    if (context.renderer == NULL) {
+        cerr << "NULL Render we cannot perform drawAsset(...), "
+                "please execute initEasySDL(...) before using this function" << endl;
+    }
 
-    if ( asset->type != ASSET_IMAGE )
+    if (asset == NULL) {
+        cerr << "NULL asset we cannot perform drawAsset(...)"<<endl;
         return;
+    }
+
+    if (asset->type != ASSET_IMAGE){
+        cerr << "Asset is not an image drawAsset(...) nothing to perform"<<endl;
+        return;
+    }
+
+    //TODO implement scaling
     SDL_Rect rect;
     rect.w = asset->detail.image.width;
     rect.h = asset->detail.image.height;
