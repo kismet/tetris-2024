@@ -311,6 +311,6 @@ void initworld(char** world){
 void updateScore(int& currentScore, int lineCleared) {
     int points[] = {100, 200, 400, 800};
 
-    currentScore += points[lineCleaned];
+    currentScore += points[lineCleared];
 }
 
