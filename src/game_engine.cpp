@@ -1,9 +1,7 @@
 #include <iostream>
 #include "../include/tetris.h"
 
-//TODO verificare che il VUOTO sia ' ' nel MONDO e non ZERO e non UNO
 //TODO aggiornare le funzioni deleteLine per punti ed eventualmente velocità
-
 
 
 char blocks[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH] = {
@@ -171,7 +169,7 @@ char blocks[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH] = {
                 },
                 {
                         {' ','6',' ',' '},
-                        {' ','6','6',' ' },
+                        {'6','6',' ',' ' },
                         {' ','6',' ',' '},
                         {' ',' ',' ',' '},
                 }
@@ -308,5 +306,4 @@ void upgradeLevel(int currentScore,int&currentLevel, int& fallSpeed, int& MaxFal
         fallSpeed = MaxFallSpeed;
     }
 }
-
 
