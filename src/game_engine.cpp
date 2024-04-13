@@ -263,6 +263,8 @@ void placeIt(int y,int x, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WID
             }
         }
     }
+    //TODO check if we have to delete line or lines and update score accordingly
+
 }
 
 /*
