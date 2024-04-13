@@ -37,6 +37,7 @@ void fallDown(int x, int y, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_W
 
 void initworld(char world[WORLD_HEIGHT][WORLD_WIDTH]);
 
+void updateScore(int& currentScore, int lineCleared);
 
 
 #endif //PEZZITETRIS_SHAPE_H
