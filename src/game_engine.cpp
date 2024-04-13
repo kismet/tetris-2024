@@ -1,7 +1,6 @@
 #include <iostream>
 #include "../include/tetris.h"
 
-//TODO aggiornare le funzioni deleteLine per punti ed eventualmente velocità
 
 
 char blocks[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH] = {
