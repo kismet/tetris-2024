@@ -247,20 +247,6 @@ void placeIt(int y,int x, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WID
     }
 }
 
-/*
-void placeCollide(int y,int x, char shape[][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
-                   char world[WORLD_HEIGHT][WORLD_WIDTH]){
-    for(int i = 0; i < SHAPE_HEIGHT; i++){
-        for(int j = 0; j < SHAPE_WIDTH; j++){
-            if (shape[typeShape][i][j] == '*') {
-                int worldX = x + j;
-                int worldY = y + i;
-                world[worldY][worldX] = '1';
-            }
-        }
-    }
-}
-*/
 bool isLineComplete(int line, char world[WORLD_HEIGHT][WORLD_WIDTH]){
     bool isComplete = true;
     int i = 0;
