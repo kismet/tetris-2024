@@ -5,7 +5,6 @@
 //TODO verificare che il VUOTO sia ' ' nel MONDO e non ZERO e non UNO
 //TODO aggiornare le funzioni deleteLine per punti ed eventualmente velocità
 
-//TODO funzione per upgradeLevel controlla il numero di linee o punteggio e aumenta velocità
 
 
 char blocks[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH] = {
@@ -313,4 +312,19 @@ void updateScore(int& currentScore, int lineCleared) {
 
     currentScore += points[lineCleared];
 }
+
+//TODO funzione per upgradeLevel controlla il numero di linee o punteggio e aumenta velocità
+void upgradeLevel(int currentScore,int&currentLevel, int& fallSpeed, int& MaxFallSpeed) {
+
+    int targetScore = currentLevel * 10000 + 10000;
+
+    if(currentScore >= targetScore) {
+        fallSpeed += 100; //TODO verificare se la velocita e' adeguata
+        currentLevel++;
+    }
+    if(fallSpeed > MaxFallSpeed) {
+        fallSpeed = MaxFallSpeed;
+    }
+}
+
 
