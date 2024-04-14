@@ -154,22 +154,35 @@ void drawInfo() {
     string scoreString = to_string(playerOne.score);
     string levelString = to_string(currentGame.level);
 
-    char* info[N_INFO] = {&topString[0],&scoreString[0], &levelString[0]};
+    char* textInfo[N_INFO] = {&topString[0],&scoreString[0], &levelString[0]};
 
-    int startY = 190;
 
-    for(int i = 0; i < N_INFO; i++){
-            int x = 235;
-            int y = startY + i * 310;
-            y -= 10;
+        int startSize = 1000;
+        int startY = 190;
+        int x = 235;
+
+        int textSize = 60 + playerOne.score / 10; // Modifica questa formula in base alle tue esigenze
+
+        // Imposta lo stile del testo
+        TextStyle_t textStyle = info;
+        textStyle.size = textSize;
+        setTextStyle(&textStyle);
 
         drawText(
-             (uint16_t ) x,(uint16_t ) y,
-            (uint16_t ) 40, (uint16_t ) 40,
-            info[i], TEXT_LEFT
+                 (uint16_t ) x,(uint16_t ) startY + 0 * 310,
+                (uint16_t ) 35, (uint16_t ) 35,
+                textInfo[0], TEXT_LEFT
+                );
+        drawText(
+             (uint16_t ) x - 10,(uint16_t ) startY + 1 * 310,
+            (uint16_t ) 55, (uint16_t ) 55,
+            textInfo[1], TEXT_LEFT
             );
-
-    }
+        drawText(
+            (uint16_t ) x,(uint16_t ) startY + 2 * 300,
+            (uint16_t ) 35, (uint16_t ) 35,
+            textInfo[2], TEXT_LEFT
+            );
 }
 
 void drawWorld() {
