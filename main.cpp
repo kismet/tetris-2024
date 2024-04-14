@@ -57,6 +57,8 @@ typedef struct Player_Data {
     int score = 0;
 } Player_Data_t;
 
+Player_Data_t playerOne;
+
 typedef struct World_Data {
     int points = 0;
     int topScore = 0;
@@ -65,6 +67,8 @@ typedef struct World_Data {
     int fallSpeed = 50;
 
 } World_Data_t;
+
+World_Data_t currentGame;
 
 static char world[WORLD_HEIGHT][WORLD_WIDTH];
 
