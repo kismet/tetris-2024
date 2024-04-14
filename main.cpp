@@ -90,6 +90,7 @@ void (*gestore_eventi)(SDL_Event *) = &menu;
 //IMPORTANTE: dare un ordine fisso agli assets
 char* assetsOrigin[]  = {
     "assets/fonts/ka1.ttf",
+    "assets/fonts/Monaco.ttf",
     "assets/blocchi/arancione.png",
     "assets/blocchi/blu.png",
     "assets/blocchi/giallo.png",
@@ -98,6 +99,7 @@ char* assetsOrigin[]  = {
     "assets/blocchi/verde.png",
     "assets/blocchi/viola.png",
     "assets/grafica/pausa_new_1.png",
+    "assets/grafica/game.png"
 };
 
 Easy_Asset_t* assets[sizeof(assetsOrigin)/sizeof(char*)];
