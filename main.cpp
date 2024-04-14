@@ -3,9 +3,9 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
-
 #include <iostream>
-
+#include <random>
+#include <ctime>
 #include "include/easy_sdl.h"
 #include "include/tetris.h"
 
@@ -135,7 +135,18 @@ void handleInput() {
     }
 }
 
+
+
 //TODO implement function for generating the index for the next block
+int randIndex() {
+
+    static random_device rd;
+    static mt19937 gen(rd());
+    static uniform_int_distribution<> dis(1, 7);
+
+    return dis(gen);
+}
+
 //TODO implement function draw world
 //TODO implement function draw player block
 
