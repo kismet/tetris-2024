@@ -71,7 +71,7 @@ bool initEasySDL( ) {
 }
 
 
-bool initEasySDL(char* title, int width, int height, uint32_t options ){
+bool initEasySDL(char* title, int height, int width, uint32_t options ){
     if ( context.subsystem_sdl_loaded ){
         return context.subsystem_sdl_loaded;
     }
