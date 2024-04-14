@@ -37,6 +37,17 @@ TextStyle_t highlight = {
         .foreground = {255, 0,0, 255}
 };
 
+TextStyle_t info = {
+    .solid = true,
+    .size = 40,
+    .italic = false,
+    .underline = false,
+    .bold = true,
+    .strikethrough = false,
+    .font = NULL,
+    .foreground = {255, 255, 255, 255}
+};
+
 typedef struct Player_Data {
     int x;
     int y;
