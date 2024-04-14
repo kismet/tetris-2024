@@ -196,6 +196,8 @@ void menu(SDL_Event* e){
                 switch (selectedOption) {
                     case 0:
                         cout << "Starting the game..." << endl;
+                        //TODO inizializzare la matrice world[][] e tutte le variabili relative (punteggio, level, etc.)
+
                         gestore_eventi = &game;
                         break;
                     case 1:
