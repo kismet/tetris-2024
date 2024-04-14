@@ -146,7 +146,10 @@ void handleInput() {
         if(e.type == SDL_QUIT){
             freeEasySDL();
             exit(0);
-        }else{
+        }else if (e.key.keysym.sym == SDLK_ESCAPE){ //TODO da aggiornare con MENU RESUME
+            gestore_eventi = &menu;
+        }
+        else {
             gestore_eventi(&e);
         }
     }
