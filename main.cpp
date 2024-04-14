@@ -264,6 +264,7 @@ int main(int argc, char** args) {
     }
 
     bool quit = false;
+    gestore_eventi =  &menu;
 
     while (!quit) {
         handleInput();
