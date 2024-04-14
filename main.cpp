@@ -24,6 +24,28 @@ static int SPRITE_HEIGHT = 256;
 
 static int MaxFallSpeed = 1000;
 
+TextStyle_t normal = {
+        .solid = true,
+        .size = 42,
+        .italic = false,
+        .underline = false,
+        .bold = false,
+        .strikethrough = false,
+        .font = NULL,
+        .foreground = {255, 255,255, 255}
+};
+
+TextStyle_t highlight = {
+        .solid = true,
+        .size = 42,
+        .italic = false,
+        .underline = false,
+        .bold = false,
+        .strikethrough = false,
+        .font = NULL,
+        .foreground = {255, 0,0, 255}
+};
+
 typedef struct Player_Data {
     int x;
     int y;
@@ -54,7 +76,7 @@ TTF_Font* fontRules = NULL;
 SDL_Texture* backgroundTexture = NULL;
 
 const int MENU_OPTIONS_COUNT = 3;
-const string MENU_OPTIONS[MENU_OPTIONS_COUNT] = {"Start Game", "Resume", "Quit"};
+char* MENU_OPTIONS[MENU_OPTIONS_COUNT] = {"Start Game", "Resume", "Quit"};
 
 int selectedOption = 0;
 
@@ -149,6 +171,7 @@ SDL_Texture* loadTexture(const string& filePath) {
 }
 
 void renderText(const string& text, int x, int y, bool selected = false) {
+    return ;
     SDL_Color color = {255, 255, 255};
     if (selected) {
         color = {255, 0, 0};
@@ -168,12 +191,13 @@ void renderText(const string& text, int x, int y, bool selected = false) {
 
 void drawMenu() {
     // Clear the screen
+    renderer = getSDLRender();
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
     // Draw the background image
-    SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
-
+    Easy_Asset_t *asset = loadAsset("assets/grafica/pausa_new_1.png");
+    drawAsset(0,0, asset);
 
     // Draw menu options
     int startY = (SCREEN_HEIGHT - MENU_OPTIONS_COUNT ) / 2;
@@ -181,7 +205,17 @@ void drawMenu() {
         int x = SCREEN_WIDTH / 2;
         int y = startY + i * 100;
         bool isSelected = (i == selectedOption);
-        renderText(MENU_OPTIONS[i], x, y, isSelected);
+        if(isSelected){
+            setTextStyle(&highlight);
+        }else{
+            setTextStyle(&normal);
+        }
+        drawText(
+                (uint16_t ) x,(uint16_t ) y,
+                (uint16_t ) SCREEN_WIDTH, (uint16_t ) 50,
+                MENU_OPTIONS[i], TEXT_CENTERED
+        );
+        //renderText(MENU_OPTIONS[i], x, y, isSelected);
     }
 
     // Update the screen
@@ -251,19 +285,26 @@ void menu(SDL_Event* e){
 
 
 int main(int argc, char** args) {
-
+    /*
     if (!initSDL()) {
         cout << "SDL initialization failed!" << endl;
         return 1;
     }
 
-    backgroundTexture = loadTexture("assets/grafica/pausa_new_1.png");
     if (backgroundTexture == NULL) {
         closeSDL();
         return 1;
     }
-
+    */
     bool quit = false;
+
+    initEasySDL("Tetris 2024", SCREEN_WIDTH , SCREEN_HEIGHT,
+                (uint32_t) EASY_SDL_DEFAULT_WINDOW_OPTIONS);
+    window = getSDLWindow();
+    renderer = getSDLRender();
+    normal.font = loadAsset("assets/fonts/ka1.ttf");
+    highlight.font = normal.font;
+    backgroundTexture = loadTexture("assets/grafica/pausa_new_1.png");
     gestore_eventi =  &menu;
 
     while (!quit) {
