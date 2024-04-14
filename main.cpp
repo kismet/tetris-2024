@@ -187,7 +187,7 @@ void menu(SDL_Event* e){
     if (e->type == SDL_QUIT) {
         freeEasySDL();
         exit(0);
-    } else if (e->type == SDL_KEYDOWN) {
+    } else if (e->type == SDL_KEYUP) {
         switch (e->key.keysym.sym) {
             case SDLK_UP:
                 selectedOption = (selectedOption - 1 + MENU_OPTIONS_COUNT) % MENU_OPTIONS_COUNT;
@@ -237,7 +237,9 @@ int main(int argc, char** args) {
 
     while (!quit) {
         handleInput();
+        if(gestore_eventi == &menu){
         drawMenu();
+        }
         SDL_Delay(10);
     }
 
