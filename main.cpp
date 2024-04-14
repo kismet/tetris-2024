@@ -251,11 +251,13 @@ void menu(SDL_Event* e){
                         cout << "Starting the game..." << endl;
                         //TODO inizializzare la matrice world[][] e tutte le variabili relative (punteggio, level, etc.)
 
+                        playerOne.score = 0;
+                        currentGame.level = 0;
                         gestore_eventi = &game;
                         break;
                     case 1:
-                        cout << "Resume menu..." << endl;
-                        gestore_eventi = &menu;
+                        cout << "Resume game..." << endl;
+                        gestore_eventi = &game;
                         break;
                     case 2:
                         exit(0);
