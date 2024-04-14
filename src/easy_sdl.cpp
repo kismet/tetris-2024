@@ -327,7 +327,7 @@ void drawText(uint16_t x, uint16_t y, uint16_t w, uint16_t h, char* txt, uint32_
     }
     if (options & TEXT_CENTERED ){
         dst.x = (w-text->w)/2;
-        dst.y = (h-text->h)/2;
+        dst.y = (h-text->h)/2+y;
         dst.w = text->w;
         dst.h = text->h;
     }
