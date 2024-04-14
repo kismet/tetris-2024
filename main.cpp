@@ -77,13 +77,16 @@ const int SCREEN_WIDTH = 1400;
 const int SCREEN_HEIGHT = 938;
 
 const int MENU_OPTIONS_COUNT = 3;
-char* MENU_OPTIONS[MENU_OPTIONS_COUNT] = {"Start Game", "Resume", "Quit"};
+char* MENU_OPTIONS[MENU_OPTIONS_COUNT] = {"Start Game","Resume", "Quit"}; //TODO Cambiare Resume con i Titoli di coda
 
+const int PAUSE_OPTIONS_COUNT = 3;
+char* PAUSE_OPTIONS[PAUSE_OPTIONS_COUNT] = {"New Game", "Resume", "Quit"};
 
 int selectedOption = 0;
 
 void menu(SDL_Event*);
 void game(SDL_Event*);
+void pause(SDL_Event*);
 
 void (*gestore_eventi)(SDL_Event *) = &menu;
 
@@ -107,39 +110,6 @@ char* assetsOrigin[]  = {
 Easy_Asset_t* assets[sizeof(assetsOrigin)/sizeof(char*)];
 
 
-void drawMenu() {
-    // Clear the screen
-    SDL_Renderer *renderer = getSDLRender();
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer);
-
-    // Draw the background image
-    Easy_Asset_t *asset = loadAsset("assets/grafica/pausa_new_1.png");
-    drawAsset(0,0, asset);
-
-    // Draw menu options
-    int startY = (SCREEN_HEIGHT - MENU_OPTIONS_COUNT ) / 2;
-    for (int i = 0; i < MENU_OPTIONS_COUNT; ++i) {
-        int x = SCREEN_WIDTH / 2;
-        int y = startY + i * 100;
-        bool isSelected = (i == selectedOption);
-        if(isSelected){
-            setTextStyle(&highlight);
-        }else{
-            setTextStyle(&normal);
-        }
-        drawText(
-                (uint16_t ) x,(uint16_t ) y,
-                (uint16_t ) SCREEN_WIDTH, (uint16_t ) 50,
-                MENU_OPTIONS[i], TEXT_CENTERED
-        );
-    }
-
-    // Update the screen
-    SDL_RenderPresent(renderer);
-}
-
-
 
 void handleInput() {
     SDL_Event e;
@@ -149,7 +119,7 @@ void handleInput() {
             freeEasySDL();
             exit(0);
         }else if (e.key.keysym.sym == SDLK_ESCAPE){ //TODO da aggiornare con MENU RESUME
-            gestore_eventi = &menu;
+            gestore_eventi = &pause;
         }
         else {
             gestore_eventi(&e);
@@ -230,6 +200,8 @@ void game(SDL_Event* e){
     //TODO check that after the call to placeIt we have to generate a new block
     //TODO draw the playerblock
 
+    playerOne.score += 10; // per fare un test del resume, new game, aggiornamento punteggio
+
     SDL_RenderPresent(renderer);
 }
 
@@ -276,6 +248,115 @@ void menu(SDL_Event* e){
     }
 }
 
+void drawMenu() {
+    // Clear the screen
+    SDL_Renderer *renderer = getSDLRender();
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
+    // Draw the background image
+    Easy_Asset_t *asset = loadAsset("assets/grafica/pausa_new_1.png");
+    drawAsset(0,0, asset);
+
+    // Draw menu options
+    int startY = (SCREEN_HEIGHT - MENU_OPTIONS_COUNT ) / 2;
+    for (int i = 0; i < MENU_OPTIONS_COUNT; ++i) {
+        int x = SCREEN_WIDTH / 2;
+        int y = startY + i * 100;
+        bool isSelected = (i == selectedOption);
+        if(isSelected){
+            setTextStyle(&highlight);
+        }else{
+            setTextStyle(&normal);
+        }
+        drawText(
+                (uint16_t ) x,(uint16_t ) y,
+                (uint16_t ) SCREEN_WIDTH, (uint16_t ) 50,
+                MENU_OPTIONS[i], TEXT_CENTERED
+        );
+    }
+
+    // Update the screen
+    SDL_RenderPresent(renderer);
+}
+
+
+void pause(SDL_Event* e){
+    if (e->type == SDL_QUIT) {
+        freeEasySDL();
+        exit(0);
+    } else if (e->type == SDL_KEYUP) {
+        switch (e->key.keysym.sym) {
+            case SDLK_UP:
+                selectedOption = (selectedOption - 1 + MENU_OPTIONS_COUNT) % MENU_OPTIONS_COUNT;
+                break;
+            case SDLK_w:
+                selectedOption = (selectedOption - 1 + MENU_OPTIONS_COUNT) % MENU_OPTIONS_COUNT;
+                break;
+            case SDLK_s:
+                 selectedOption = (selectedOption + 1) % MENU_OPTIONS_COUNT;
+                break;
+            case SDLK_DOWN:
+                selectedOption = (selectedOption + 1) % MENU_OPTIONS_COUNT;
+                break;
+            case SDLK_RETURN:
+                switch (selectedOption) {
+                    case 0:
+                        cout << "Starting new game..." << endl;
+                        //TODO inizializzare la matrice world[][] e tutte le variabili relative (punteggio, level, etc.)
+
+                        playerOne.score = 0;
+                        currentGame.level = 0;
+                        gestore_eventi = &game;
+                        break;
+                    case 1:
+                        cout << "Resume menu..." << endl;
+                        gestore_eventi = &game;
+                        break;
+                    case 2:
+                        exit(0);
+                        break;
+                    default:
+
+                        break;
+                }
+                break;
+        }
+    }
+}
+
+void drawPause() {
+    // Clear the screen
+    SDL_Renderer *renderer = getSDLRender();
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
+    // Draw the background image
+    Easy_Asset_t *asset = loadAsset("assets/grafica/pausa_new_1.png");
+    drawAsset(0,0, asset);
+
+    // Draw menu options
+    int startY = (SCREEN_HEIGHT - PAUSE_OPTIONS_COUNT ) / 2;
+    for (int i = 0; i < PAUSE_OPTIONS_COUNT; ++i) {
+        int x = SCREEN_WIDTH / 2;
+        int y = startY + i * 100;
+        bool isSelected = (i == selectedOption);
+        if(isSelected){
+            setTextStyle(&highlight);
+        }else{
+            setTextStyle(&normal);
+        }
+        drawText(
+                (uint16_t ) x,(uint16_t ) y,
+                (uint16_t ) SCREEN_WIDTH, (uint16_t ) 50,
+                PAUSE_OPTIONS[i], TEXT_CENTERED
+        );
+    }
+
+    // Update the screen
+    SDL_RenderPresent(renderer);
+}
+
 
 int main(int argc, char** args) {
     bool quit = false;
@@ -291,6 +372,9 @@ int main(int argc, char** args) {
         handleInput();
         if(gestore_eventi == &menu){
             drawMenu();
+        }
+        if(gestore_eventi == &pause) {
+            drawPause();
         }
         SDL_Delay(10);
     }
