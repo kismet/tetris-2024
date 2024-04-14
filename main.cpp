@@ -229,7 +229,7 @@ void handleInput() {
 
     while (SDL_PollEvent(&e) != 0) {
         if(e.type == SDL_QUIT){
-            closeSDL();
+            freeEasySDL();
             exit(0);
         }else{
             gestore_eventi(&e);
@@ -245,7 +245,7 @@ void game(SDL_Event* e){
 
 void menu(SDL_Event* e){
     if (e->type == SDL_QUIT) {
-        closeSDL();
+        freeEasySDL();
         exit(0);
     } else if (e->type == SDL_KEYDOWN) {
         switch (e->key.keysym.sym) {
