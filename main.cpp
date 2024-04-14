@@ -146,7 +146,7 @@ void drawBackground() {
 }
 
 void drawInfo() {
-    setTextStyle(&info);
+   // setTextStyle(&info);
 
     const int N_INFO = 3;
 
@@ -161,28 +161,27 @@ void drawInfo() {
         int startY = 190;
         int x = 235;
 
-        int textSize = 60 + playerOne.score / 10; // Modifica questa formula in base alle tue esigenze
+        int textSize = 10 + playerOne.score / 100;
 
-        // Imposta lo stile del testo
         TextStyle_t textStyle = info;
         textStyle.size = textSize;
         setTextStyle(&textStyle);
 
         drawText(
-                 (uint16_t ) x,(uint16_t ) startY + 0 * 310,
+                (uint16_t ) x,(uint16_t ) startY + 0 * 310,
                 (uint16_t ) 35, (uint16_t ) 35,
                 textInfo[0], TEXT_LEFT
                 );
         drawText(
-             (uint16_t ) x - 10,(uint16_t ) startY + 1 * 310,
-            (uint16_t ) 55, (uint16_t ) 55,
-            textInfo[1], TEXT_LEFT
-            );
+                (uint16_t ) (x-20) + (playerOne.score) / 2000,(uint16_t ) startY + 1 * 310,
+                (uint16_t ) 75, (uint16_t ) 50,
+                textInfo[1], TEXT_LEFT
+                );
         drawText(
-            (uint16_t ) x,(uint16_t ) startY + 2 * 300,
-            (uint16_t ) 35, (uint16_t ) 35,
-            textInfo[2], TEXT_LEFT
-            );
+                (uint16_t ) x,(uint16_t ) startY + 2 * 305,
+                (uint16_t ) 35, (uint16_t ) 35,
+                textInfo[2], TEXT_LEFT
+                );
 }
 
 void drawWorld() {
@@ -213,7 +212,16 @@ void game(SDL_Event* e){
     //TODO check that after the call to placeIt we have to generate a new block
     //TODO draw the playerblock
 
-    playerOne.score += 10; // per fare un test del resume, new game, aggiornamento punteggio
+
+    //Parte per il test del punteggio
+        playerOne.score += 10;// per fare un test del resume, new game, aggiornamento punteggio
+
+        int targetScore = currentGame.level * 3000;
+
+        if(playerOne.score >= targetScore) {
+            //TODO verificare se la velocita e' adeguata
+            currentGame.level++;
+        }
 
     SDL_RenderPresent(renderer);
 }
@@ -268,8 +276,11 @@ void drawMenu() {
     SDL_RenderClear(renderer);
 
     // Draw the background image
-    Easy_Asset_t *asset = loadAsset("assets/grafica/pausa_new_1.png");
+    Easy_Asset_t *asset = loadAsset("assets/grafica/menu.png");
     drawAsset(0,0, asset);
+
+    normal.size = 42;
+    highlight.size = 42;
 
     // Draw menu options
     int startY = (SCREEN_HEIGHT - MENU_OPTIONS_COUNT ) / 2;
@@ -346,14 +357,17 @@ void drawPause() {
     SDL_RenderClear(renderer);
 
     // Draw the background image
-    Easy_Asset_t *asset = loadAsset("assets/grafica/pausa_new_1.png");
+    Easy_Asset_t *asset = loadAsset("assets/grafica/pausa.png");
     drawAsset(0,0, asset);
 
+    normal.size = 58;
+    highlight.size = 58;
+
     // Draw menu options
-    int startY = (SCREEN_HEIGHT - PAUSE_OPTIONS_COUNT ) / 2;
+    int startY = (SCREEN_HEIGHT - PAUSE_OPTIONS_COUNT ) / 3;
     for (int i = 0; i < PAUSE_OPTIONS_COUNT; ++i) {
         int x = SCREEN_WIDTH / 2;
-        int y = startY + i * 100;
+        int y = startY + i * 150;
         bool isSelected = (i == selectedOption);
         if(isSelected){
             setTextStyle(&highlight);
@@ -362,7 +376,7 @@ void drawPause() {
         }
         drawText(
                 (uint16_t ) x,(uint16_t ) y,
-                (uint16_t ) SCREEN_WIDTH, (uint16_t ) 50,
+                (uint16_t ) SCREEN_WIDTH, (uint16_t ) 60,
                 PAUSE_OPTIONS[i], TEXT_CENTERED
         );
     }
