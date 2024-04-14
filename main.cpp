@@ -4,6 +4,7 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <iostream>
+#include <string>
 #include <random>
 #include <ctime>
 #include "include/easy_sdl.h"
@@ -77,6 +78,7 @@ const int SCREEN_HEIGHT = 938;
 
 const int MENU_OPTIONS_COUNT = 3;
 char* MENU_OPTIONS[MENU_OPTIONS_COUNT] = {"Start Game", "Resume", "Quit"};
+
 
 int selectedOption = 0;
 
@@ -167,19 +169,68 @@ int randIndex() {
     return dis(gen);
 }
 
-//TODO implement function draw world
+//TODO implement function draw background
+void drawBackground() {
+    Easy_Asset_t *asset = loadAsset("assets/grafica/game.png");
+    drawAsset(0,0, asset);
+}
+
+void drawInfo() {
+    setTextStyle(&info);
+
+    const int N_INFO = 3;
+
+    string topString = to_string(currentGame.topScore);
+    string scoreString = to_string(playerOne.score);
+    string levelString = to_string(currentGame.level);
+
+    char* info[N_INFO] = {&topString[0],&scoreString[0], &levelString[0]};
+
+    int startY = 190;
+
+    for(int i = 0; i < N_INFO; i++){
+            int x = 235;
+            int y = startY + i * 310;
+            y -= 10;
+
+        drawText(
+             (uint16_t ) x,(uint16_t ) y,
+            (uint16_t ) 40, (uint16_t ) 40,
+            info[i], TEXT_LEFT
+            );
+
+    }
+}
+
+void drawWorld() {
+
+}
 //TODO implement function draw player block
+void drawPlayerBlock(Player_Data_t player) {
+
+}
 
 //TODO implement the game mode
 void game(SDL_Event* e){
-    cout << "Test game" << endl;
-    gestore_eventi = &menu;
+        cout << "Test game" << endl;
+        // Clear the screen
+        SDL_Renderer *renderer = getSDLRender();
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
+
     //TODO drawbackground
+        drawBackground();
     //TODO drawpoints and all the text info
+        drawInfo();
+
     //TODO drawworld
-    //TODO hanldeinput or handle fall speed
+
+
+    //TODO hanldeinput or handle fall speedkj
     //TODO check that after the call to placeIt we have to generate a new block
     //TODO draw the playerblock
+
+    SDL_RenderPresent(renderer);
 }
 
 
@@ -233,12 +284,13 @@ int main(int argc, char** args) {
                 (uint32_t) EASY_SDL_DEFAULT_WINDOW_OPTIONS);
     normal.font = loadAsset("assets/fonts/ka1.ttf");
     highlight.font = normal.font;
+    info.font = loadAsset("assets/fonts/Monaco.ttf");
     gestore_eventi =  &menu;
 
     while (!quit) {
         handleInput();
         if(gestore_eventi == &menu){
-        drawMenu();
+            drawMenu();
         }
         SDL_Delay(10);
     }
