@@ -135,9 +135,20 @@ void handleInput() {
     }
 }
 
+//TODO implement function for generating the index for the next block
+//TODO implement function draw world
+//TODO implement function draw player block
+
+//TODO implement the game mode
 void game(SDL_Event* e){
     cout << "Test game" << endl;
     gestore_eventi = &menu;
+    //TODO drawbackground
+    //TODO drawpoints and all the text info
+    //TODO drawworld
+    //TODO hanldeinput or handle fall speed
+    //TODO check that after the call to placeIt we have to generate a new block
+    //TODO draw the playerblock
 }
 
 
