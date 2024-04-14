@@ -80,7 +80,7 @@ const int MENU_OPTIONS_COUNT = 3;
 char* MENU_OPTIONS[MENU_OPTIONS_COUNT] = {"Start Game","Resume", "Quit"}; //TODO Cambiare Resume con i Titoli di coda
 
 const int PAUSE_OPTIONS_COUNT = 3;
-char* PAUSE_OPTIONS[PAUSE_OPTIONS_COUNT] = {"New Game", "Resume", "Quit"};
+char* PAUSE_OPTIONS[PAUSE_OPTIONS_COUNT] = {"New Game", "Resume", "Menu"};
 
 int selectedOption = 0;
 
@@ -118,7 +118,7 @@ void handleInput() {
         if(e.type == SDL_QUIT){
             freeEasySDL();
             exit(0);
-        }else if (e.key.keysym.sym == SDLK_ESCAPE){ //TODO da aggiornare con MENU RESUME
+        }else if (e.key.keysym.sym == SDLK_ESCAPE){
             gestore_eventi = &pause;
         }
         else {
@@ -310,11 +310,12 @@ void pause(SDL_Event* e){
                         gestore_eventi = &game;
                         break;
                     case 1:
-                        cout << "Resume menu..." << endl;
+                        cout << "Resume game..." << endl;
                         gestore_eventi = &game;
                         break;
                     case 2:
-                        exit(0);
+                        cout << "Menu..." << endl;
+                        gestore_eventi = &menu;
                         break;
                     default:
 
