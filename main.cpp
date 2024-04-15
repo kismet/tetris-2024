@@ -78,7 +78,7 @@ const int SCREEN_HEIGHT = 938;
 
 const int MENU_OPTIONS_COUNT = 3;
 //TODO Cambiare Resume con i Titoli di coda
-char* MENU_OPTIONS[MENU_OPTIONS_COUNT] = {"Start Game","Resume", "Quit"};
+char* MENU_OPTIONS[MENU_OPTIONS_COUNT] = {"Start Game","Credits", "Quit"};
 
 
 const int PAUSE_OPTIONS_COUNT = 3;
@@ -89,6 +89,7 @@ int selectedOption = 0;
 void menu(SDL_Event*);
 void game(SDL_Event*);
 void pause(SDL_Event*);
+void credits(SDL_Event*);
 
 void (*gestore_eventi)(SDL_Event *) = &menu;
 
@@ -388,6 +389,13 @@ void drawPause() {
 
     // Update the screen
     SDL_RenderPresent(renderer);
+}
+
+void credits(){
+}
+
+void drawCredits(){
+
 }
 
 
