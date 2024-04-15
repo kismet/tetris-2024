@@ -150,7 +150,7 @@ void drawBackground() {
 }
 
 void drawInfo() {
-   // setTextStyle(&info);
+    setTextStyle(&info);
 
     const int N_INFO = 3;
 
@@ -162,23 +162,24 @@ void drawInfo() {
 
 
         int startSize = 1000;
-        int startY = 190;
+        int startY = 200;
         int x = 235;
 
-        int textSize = 10 + playerOne.score / 100;
+        if(playerOne.score > 0){
+            int textSize = 15 * playerOne.score / 10 ;
 
-        TextStyle_t textStyle = info;
-        textStyle.size = textSize;
-        setTextStyle(&textStyle);
+            TextStyle_t textStyle = info;
+            textStyle.size = textSize;
+            setTextStyle(&textStyle);
 
-        drawText(
-                (uint16_t ) x,(uint16_t ) startY + 0 * 310,
-                (uint16_t ) 35, (uint16_t ) 35,
+            drawText(
+                (uint16_t ) (x-10) + currentGame.topScore / 10000,(uint16_t ) startY,
+                (uint16_t ) 50 + (currentGame.topScore) / 800, (uint16_t ) 50,
                 textInfo[0], TEXT_LEFT
                 );
         drawText(
-                (uint16_t ) (x-20) + (playerOne.score) / 2000,(uint16_t ) startY + 1 * 310,
-                (uint16_t ) 75, (uint16_t ) 50,
+                (uint16_t ) (x-10) + (playerOne.score) / 10000 ,(uint16_t ) startY + 1 * 330,
+                (uint16_t ) 50 + (playerOne.score) / 800, (uint16_t ) 50,
                 textInfo[1], TEXT_LEFT
                 );
         drawText(
@@ -186,6 +187,24 @@ void drawInfo() {
                 (uint16_t ) 35, (uint16_t ) 35,
                 textInfo[2], TEXT_LEFT
                 );
+        }
+        else if (playerOne.score == 0){
+            drawText(
+                (uint16_t ) x,(uint16_t ) startY,
+                (uint16_t ) 50, (uint16_t ) 50,
+                textInfo[0], TEXT_LEFT
+                );
+        drawText(
+                (uint16_t ) x,(uint16_t ) startY + 1 * 330,
+                (uint16_t ) 50, (uint16_t ) 50,
+                textInfo[1], TEXT_LEFT
+                );
+        drawText(
+                (uint16_t ) x,(uint16_t ) startY + 2 * 305,
+                (uint16_t ) 35, (uint16_t ) 35,
+                textInfo[2], TEXT_LEFT
+                );
+        }
 }
 
 void drawWorld() {
@@ -218,7 +237,7 @@ void game(SDL_Event* e){
 
 
     //Parte per il test del punteggio
-        playerOne.score += 10;// per fare un test del resume, new game, aggiornamento punteggio
+        playerOne.score += 10;
 
         int targetScore = currentGame.level * 3000;
 
@@ -255,12 +274,11 @@ void menu(SDL_Event* e){
                         cout << "Starting the game..." << endl;
                         //TODO inizializzare la matrice world[][] e tutte le variabili relative (punteggio, level, etc.)
 
-                        playerOne.score = 0;
-                        currentGame.level = 0;
+
                         gestore_eventi = &game;
                         break;
                     case 1:
-                        cout << "Resume game..." << endl;
+                        cout << "Credits..." << endl;
                         gestore_eventi = &game;
                         break;
                     case 2:
@@ -335,8 +353,7 @@ void pause(SDL_Event* e){
                         cout << "Starting new game..." << endl;
                         //TODO inizializzare la matrice world[][] e tutte le variabili relative (punteggio, level, etc.)
 
-                        playerOne.score = 0;
-                        currentGame.level = 0;
+
                         gestore_eventi = &game;
                         break;
                     case 1:
