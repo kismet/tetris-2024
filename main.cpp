@@ -77,7 +77,6 @@ const int SCREEN_WIDTH = 1400;
 const int SCREEN_HEIGHT = 938;
 
 const int MENU_OPTIONS_COUNT = 3;
-//TODO Cambiare Resume con i Titoli di coda
 char* MENU_OPTIONS[MENU_OPTIONS_COUNT] = {"Start Game","Credits", "Quit"};
 
 
@@ -97,8 +96,6 @@ void (*gestore_eventi)(SDL_Event *) = &menu;
 //TODO Compleate questo elenco con TUTTI gli assets che useremo
 //IMPORTANTE: dare un ordine fisso agli assets
 char* assetsOrigin[]  = {
-    "assets/fonts/ka1.ttf",
-    "assets/fonts/Monaco.ttf",
     "assets/blocchi/arancione.png",
     "assets/blocchi/blu.png",
     "assets/blocchi/giallo.png",
@@ -108,7 +105,9 @@ char* assetsOrigin[]  = {
     "assets/blocchi/viola.png",
     "assets/grafica/menu.png",
     "assets/grafica/game.png",
-    "assets/grafica/pausa.png"
+    "assets/grafica/pausa.png",
+    "assets/fonts/ka1.ttf",
+    "assets/fonts/Monaco.ttf",
 };
 
 Easy_Asset_t* assets[sizeof(assetsOrigin)/sizeof(char*)];
@@ -208,11 +207,35 @@ void drawInfo() {
 }
 
 void drawWorld() {
-
+    for(int i = 0; i < WORLD_HEIGHT; i++){
+        for(int j = 0; j < WORLD_WIDTH; j++) {
+            if(world[i][j]  >= '1' || world[i][j] <= '8'){
+                Easy_Asset_t *block = loadAsset(assetsOrigin[world[i][j] - '1']);
+                drawAsset(
+                          540 + j * 32,
+                          i * 32,
+                          block
+                          );
+            }
+        }
+    }
 }
+
 //TODO implement function draw player block
 void drawPlayerBlock(Player_Data_t player) {
-
+    for(int i = 0; i < SHAPE_HEIGHT; i++){
+        for(int j = 0; j < SHAPE_WIDTH; j++){
+                char point = blocks[player.assetIdx][player.rotation][i][j];
+            if(point != ' '){
+                Easy_Asset_t *block = loadAsset(assetsOrigin[point - '1']);
+                drawAsset(
+                          540 + (j +player.x) * 32,
+                          (i + player.y) * 32,
+                          block
+                          );
+            }
+        }
+    }
 }
 
 //TODO implement the game mode
