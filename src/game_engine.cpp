@@ -1,7 +1,9 @@
 #include <iostream>
 #include "../include/tetris.h"
+#include <random>
+#include <ctime>
 
-
+using namespace std;
 
 char blocks[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH] = {
         //I
@@ -318,11 +320,28 @@ void upgradeLevel(int currentScore,int&currentLevel, int& fallSpeed, int& MaxFal
     }
 }
 
+int randIndex() {
+
+    static random_device rd;
+    static mt19937 gen(rd());
+    static uniform_int_distribution<> dis(1, 7);
+
+    int val = dis(gen);
+    cout << val << endl;
+    return val;
+}
+
+
+
 void setupNewGames(Player_Data_t& player, World_Data_t& world, char map[WORLD_HEIGHT][WORLD_WIDTH]) {
     player.score = 0;
     player.rotation=0;
     world.level = 1;
     world.fallSpeed= 50;
     initWorld(map);
+    player.assetIdx = randIndex() - 1;
+    world.nextBlock = randIndex() - 1;
+    player.x = 3;
+    player.y =  0;
 }
 

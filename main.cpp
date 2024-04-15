@@ -116,14 +116,7 @@ void handleInput() {
 
 
 //TODO implement function for generating the index for the next block
-int randIndex() {
 
-    static random_device rd;
-    static mt19937 gen(rd());
-    static uniform_int_distribution<> dis(1, 7);
-
-    return dis(gen);
-}
 
 //TODO implement function draw background
 void drawBackground() {
@@ -189,6 +182,8 @@ void drawInfo() {
         }
 }
 
+
+//TODO fix segmentation fault
 void drawWorld() {
     for(int i = 0; i < WORLD_HEIGHT; i++){
         for(int j = 0; j < WORLD_WIDTH; j++) {
@@ -235,12 +230,13 @@ void game(SDL_Event* e){
         drawInfo();
 
     //TODO drawworld
-
+        //drawWorld();
 
     //TODO hanldeinput or handle fall speedkj
+
     //TODO check that after the call to placeIt we have to generate a new block
     //TODO draw the playerblock
-
+        drawPlayerBlock(playerOne);
 
     //Parte per il test del punteggio
         playerOne.score += 10;
@@ -279,9 +275,7 @@ void menu(SDL_Event* e){
                     case 0:
                         cout << "Starting the game..." << endl;
                         //TODO inizializzare la matrice world[][] e tutte le variabili relative (punteggio, level, etc.)
-
-                        playerOne.score = 0;
-                        currentGame.level = 1;
+                        setupNewGames(playerOne, currentGame, world);
                         gestore_eventi = &game;
                         break;
                     case 1:
@@ -359,8 +353,7 @@ void pause(SDL_Event* e){
                     case 0:
                         cout << "Starting new game..." << endl;
                         //TODO inizializzare la matrice world[][] e tutte le variabili relative (punteggio, level, etc.)
-                        playerOne.score = 0;
-                        currentGame.level = 1;
+                        setupNewGames(playerOne, currentGame, world);
                         gestore_eventi = &game;
                         break;
                     case 1:
@@ -437,10 +430,7 @@ void credits(SDL_Event* e){
                 switch (selectedOption) {
                     case 0:
                         cout << "Starting the game..." << endl;
-                        //TODO inizializzare la matrice world[][] e tutte le variabili relative (punteggio, level, etc.)
-
-                        playerOne.score = 0;
-                        currentGame.level = 1;
+                        //TODO inizializzare la matrice world[][] e tutte le variabili relative (punteggio, level, etc.
                         gestore_eventi = &game;
                         break;
                     case 1:
