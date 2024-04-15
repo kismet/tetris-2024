@@ -77,7 +77,9 @@ const int SCREEN_WIDTH = 1400;
 const int SCREEN_HEIGHT = 938;
 
 const int MENU_OPTIONS_COUNT = 3;
-char* MENU_OPTIONS[MENU_OPTIONS_COUNT] = {"Start Game","Resume", "Quit"}; //TODO Cambiare Resume con i Titoli di coda
+//TODO Cambiare Resume con i Titoli di coda
+char* MENU_OPTIONS[MENU_OPTIONS_COUNT] = {"Start Game","Resume", "Quit"};
+
 
 const int PAUSE_OPTIONS_COUNT = 3;
 char* PAUSE_OPTIONS[PAUSE_OPTIONS_COUNT] = {"New Game", "Resume", "Menu"};
@@ -103,8 +105,9 @@ char* assetsOrigin[]  = {
     "assets/blocchi/rosso.png",
     "assets/blocchi/verde.png",
     "assets/blocchi/viola.png",
-    "assets/grafica/pausa_new_1.png",
-    "assets/grafica/game.png"
+    "assets/grafica/menu.png",
+    "assets/grafica/game.png",
+    "assets/grafica/pausa.png"
 };
 
 Easy_Asset_t* assets[sizeof(assetsOrigin)/sizeof(char*)];
