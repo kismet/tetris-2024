@@ -212,16 +212,17 @@ void drawPlayerBlock(Player_Data_t player) {
     }
 }
 
-//TODO implement the game mode
-void game(SDL_Event* e){
-        cout << "Test game" << endl;
-        // Clear the screen
+
+
+void drawGame(){
+     // Clear the screen
         SDL_Renderer *renderer = getSDLRender();
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
     //TODO drawbackground
         drawBackground();
+
     //TODO drawpoints and all the text info
         drawInfo();
 
@@ -234,17 +235,25 @@ void game(SDL_Event* e){
     //TODO draw the playerblock
         drawPlayerBlock(playerOne);
 
-    //Parte per il test del punteggio
-        playerOne.score += 10;
+        SDL_RenderPresent(renderer);
+}
 
-        int targetScore = currentGame.level * 3000;
+int lastTime = 0;
 
-        if(playerOne.score >= targetScore) {
-            //TODO verificare se la velocita e' adeguata
-            currentGame.level++;
+//TODO implement the game mode
+void game(SDL_Event* e){
+
+        drawGame();
+
+        int currentTime = SDL_GetTicks();
+        int s = currentTime - lastTime;
+
+        if (s >= 1000) {
+            playerOne.y += 1;
+            lastTime = currentTime;
         }
 
-    SDL_RenderPresent(renderer);
+    drawGame();
 }
 
 
