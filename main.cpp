@@ -274,12 +274,13 @@ void menu(SDL_Event* e){
                         cout << "Starting the game..." << endl;
                         //TODO inizializzare la matrice world[][] e tutte le variabili relative (punteggio, level, etc.)
 
-
+                        playerOne.score = 0;
+                        currentGame.level = 1;
                         gestore_eventi = &game;
                         break;
                     case 1:
                         cout << "Credits..." << endl;
-                        gestore_eventi = &game;
+                        gestore_eventi = &credits;
                         break;
                     case 2:
                         exit(0);
@@ -352,8 +353,8 @@ void pause(SDL_Event* e){
                     case 0:
                         cout << "Starting new game..." << endl;
                         //TODO inizializzare la matrice world[][] e tutte le variabili relative (punteggio, level, etc.)
-
-
+                        playerOne.score = 0;
+                        currentGame.level = 1;
                         gestore_eventi = &game;
                         break;
                     case 1:
@@ -408,11 +409,83 @@ void drawPause() {
     SDL_RenderPresent(renderer);
 }
 
-void credits(){
+void credits(SDL_Event* e){
+    if (e->type == SDL_QUIT) {
+        freeEasySDL();
+        exit(0);
+    } else if (e->type == SDL_KEYUP) {
+        switch (e->key.keysym.sym) {
+            case SDLK_UP:
+                selectedOption = (selectedOption - 1 + MENU_OPTIONS_COUNT) % MENU_OPTIONS_COUNT;
+                break;
+            case SDLK_w:
+                selectedOption = (selectedOption - 1 + MENU_OPTIONS_COUNT) % MENU_OPTIONS_COUNT;
+                break;
+            case SDLK_s:
+                 selectedOption = (selectedOption + 1) % MENU_OPTIONS_COUNT;
+                break;
+            case SDLK_DOWN:
+                selectedOption = (selectedOption + 1) % MENU_OPTIONS_COUNT;
+                break;
+            case SDLK_RETURN:
+                switch (selectedOption) {
+                    case 0:
+                        cout << "Starting the game..." << endl;
+                        //TODO inizializzare la matrice world[][] e tutte le variabili relative (punteggio, level, etc.)
+
+                        playerOne.score = 0;
+                        currentGame.level = 1;
+                        gestore_eventi = &game;
+                        break;
+                    case 1:
+                        cout << "Credits..." << endl;
+                        gestore_eventi = &credits;
+                        break;
+                    case 2:
+                        exit(0);
+                        break;
+                    default:
+
+                        break;
+                }
+                break;
+        }
+    }
 }
 
 void drawCredits(){
+    // Clear the screen
+    SDL_Renderer *renderer = getSDLRender();
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
 
+    // Draw the background image
+    Easy_Asset_t *asset = loadAsset("assets/grafica/menu.png");
+    drawAsset(0,0, asset);
+
+    normal.size = 42;
+    highlight.size = 42;
+
+    // Draw menu options
+    int startY = (SCREEN_HEIGHT - MENU_OPTIONS_COUNT ) / 2;
+    for (int i = 0; i < MENU_OPTIONS_COUNT; ++i) {
+        int x = SCREEN_WIDTH / 2;
+        int y = startY + i * 100;
+        bool isSelected = (i == selectedOption);
+        if(isSelected){
+            setTextStyle(&highlight);
+        }else{
+            setTextStyle(&normal);
+        }
+        drawText(
+                (uint16_t ) x,(uint16_t ) y,
+                (uint16_t ) SCREEN_WIDTH, (uint16_t ) 50,
+                MENU_OPTIONS[i], TEXT_CENTERED
+        );
+    }
+
+    // Update the screen
+    SDL_RenderPresent(renderer);
 }
 
 
@@ -433,6 +506,9 @@ int main(int argc, char** args) {
         }
         if(gestore_eventi == &pause) {
             drawPause();
+        }
+        if(gestore_eventi == &credits){
+            drawCredits();
         }
         SDL_Delay(10);
     }
