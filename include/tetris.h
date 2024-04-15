@@ -32,7 +32,7 @@ void deleteLine(int line, char world[WORLD_HEIGHT][WORLD_WIDTH]);
 void fallDown(int x, int y, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
               char world[WORLD_HEIGHT][WORLD_WIDTH], int& currentScore);
 
-void initworld(char world[WORLD_HEIGHT][WORLD_WIDTH]);
+void initworld(char** world);
 
 void updateScore(int& currentScore, int lineCleared);
 
