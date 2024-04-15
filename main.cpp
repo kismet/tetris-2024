@@ -252,7 +252,7 @@ void menu(SDL_Event* e){
     if (e->type == SDL_QUIT) {
         freeEasySDL();
         exit(0);
-    } else if (e->type == SDL_KEYUP) {
+    } else if (e->type == SDL_KEYDOWN) {
         switch (e->key.keysym.sym) {
             case SDLK_UP:
                 selectedOption = (selectedOption - 1 + MENU_OPTIONS_COUNT) % MENU_OPTIONS_COUNT;
@@ -330,7 +330,7 @@ void pause(SDL_Event* e){
     if (e->type == SDL_QUIT) {
         freeEasySDL();
         exit(0);
-    } else if (e->type == SDL_KEYUP) {
+    } else if (e->type == SDL_KEYDOWN) {
         switch (e->key.keysym.sym) {
             case SDLK_UP:
                 selectedOption = (selectedOption - 1 + MENU_OPTIONS_COUNT) % MENU_OPTIONS_COUNT;
@@ -408,7 +408,7 @@ void credits(SDL_Event* e){
     if (e->type == SDL_QUIT) {
         freeEasySDL();
         exit(0);
-    } else if (e->type == SDL_KEYUP) {
+    } else if (e->type == SDL_KEYDOWN) {
         switch (e->key.keysym.sym) {
             case SDLK_UP:
                 selectedOption = (selectedOption - 1 + MENU_OPTIONS_COUNT) % MENU_OPTIONS_COUNT;
