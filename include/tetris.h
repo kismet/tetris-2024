@@ -27,7 +27,8 @@ typedef struct World_Data {
     int topScore = 0;
     int level = 1;
     int nextBlock  = -1;
-    int fallSpeed = 50;
+    int fallSpeed = 1000;
+    int lastTime = 0;
 
 } World_Data_t;
 

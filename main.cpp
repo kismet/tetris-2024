@@ -226,34 +226,46 @@ void drawGame(){
     //TODO drawpoints and all the text info
         drawInfo();
 
-    //TODO drawworld
-        drawWorld();
+        //TODO drawworld
+            drawWorld();
 
-    //TODO hanldeinput or handle fall speedkj
+        //TODO draw the playerblock
+            drawPlayerBlock(playerOne);
 
-    //TODO check that after the call to placeIt we have to generate a new block
-    //TODO draw the playerblock
-        drawPlayerBlock(playerOne);
+            int currentTime = SDL_GetTicks();
+            int s = currentTime - currentGame.lastTime;
 
-        SDL_RenderPresent(renderer);
+            if (s >= currentGame.fallSpeed) {
+                    playerOne.y += 1;
+                    currentGame.lastTime = currentTime;
+            }
+
+
+        //TODO check that after the call to placeIt we have to generate a new block
+
+
+
+
+
+            SDL_RenderPresent(renderer);
 }
 
-int lastTime = 0;
+
 
 //TODO implement the game mode
 void game(SDL_Event* e){
 
-        drawGame();
-
-        int currentTime = SDL_GetTicks();
-        int s = currentTime - lastTime;
-
-        if (s >= 1000) {
-            playerOne.y += 1;
-            lastTime = currentTime;
+        if(e->type == SDL_QUIT){
+            freeEasySDL();
+            exit(0);
         }
-
-    drawGame();
+        else if(e->type == SDL_KEYDOWN){
+            switch(e->key.keysym.sym){
+                        case SDLK_s: playerOne.y += 1; break;
+                        case SDLK_a: playerOne.x -= 1; break;
+                        case SDLK_d: playerOne.x += 1; break;
+                    }
+        }
 }
 
 
@@ -501,8 +513,12 @@ int main(int argc, char** args) {
     info.font = loadAsset("assets/fonts/Monaco.ttf");
     gestore_eventi =  &menu;
 
+
     while (!quit) {
         handleInput();
+        if(gestore_eventi == &game){
+            drawGame();
+        }
         if(gestore_eventi == &menu){
             drawMenu();
         }
