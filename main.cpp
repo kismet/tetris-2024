@@ -114,10 +114,6 @@ void handleInput() {
 }
 
 
-
-//TODO implement function for generating the index for the next block
-
-
 //TODO implement function draw background
 void drawBackground() {
     Easy_Asset_t *asset = loadAsset("assets/grafica/game.png");
@@ -187,7 +183,7 @@ void drawInfo() {
 void drawWorld() {
     for(int i = 0; i < WORLD_HEIGHT; i++){
         for(int j = 0; j < WORLD_WIDTH; j++) {
-            if(world[i][j]  >= '1' || world[i][j] <= '8'){
+            if(world[i][j]  >= '1' && world[i][j] <= '7'){
                 Easy_Asset_t *block = loadAsset(assetsOrigin[world[i][j] - '1']);
                 drawAsset(
                           540 + j * 32,
@@ -230,7 +226,7 @@ void game(SDL_Event* e){
         drawInfo();
 
     //TODO drawworld
-        //drawWorld();
+        drawWorld();
 
     //TODO hanldeinput or handle fall speedkj
 
@@ -431,6 +427,7 @@ void credits(SDL_Event* e){
                     case 0:
                         cout << "Starting the game..." << endl;
                         //TODO inizializzare la matrice world[][] e tutte le variabili relative (punteggio, level, etc.
+                        setupNewGames(playerOne, currentGame, world);
                         gestore_eventi = &game;
                         break;
                     case 1:
