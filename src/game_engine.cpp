@@ -320,11 +320,12 @@ void upgradeLevel(int currentScore,int&currentLevel, int& fallSpeed, int& MaxFal
     }
 }
 
+//TODO risolvere il problema del crush
 int randIndex() {
 
     static random_device rd;
     static mt19937 gen(rd());
-    static uniform_int_distribution<> dis(1, 7);
+    static uniform_int_distribution<> dis(0, 6);
 
     int val = dis(gen);
     cout << val << endl;
@@ -339,8 +340,9 @@ void setupNewGames(Player_Data_t& player, World_Data_t& world, char map[WORLD_HE
     world.level = 1;
     world.fallSpeed= 50;
     initWorld(map);
-    player.assetIdx = randIndex() - 1;
-    world.nextBlock = randIndex() - 1;
+    player.assetIdx = randIndex();
+   // player.assetIdx = 6;
+    world.nextBlock = randIndex();
     player.x = 3;
     player.y =  0;
 }
