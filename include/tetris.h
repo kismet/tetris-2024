@@ -1,6 +1,6 @@
 #ifndef PEZZITETRIS_SHAPE_H
 #define PEZZITETRIS_SHAPE_H
-
+#include "../include/easy_sdl.h"
 const int MAX = 4;
 
 const int SHAPE_WIDTH = MAX;
@@ -12,6 +12,25 @@ const char EMPTY_SPACE = ' ';
 
 const int N_BLOCKS= 7;
 const int ROTATION = 4;
+
+typedef struct Player_Data {
+    int x;
+    int y;
+    int rotation;
+    Easy_Asset_t* piece;
+    int assetIdx;
+    int score = 0;
+} Player_Data_t;
+
+typedef struct World_Data {
+    int points = 0;
+    int topScore = 0;
+    int level = 1;
+    int nextBlock  = -1;
+    int fallSpeed = 50;
+
+} World_Data_t;
+
 
 //Forma I
 extern char blocks[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH];
@@ -32,12 +51,13 @@ void deleteLine(int line, char world[WORLD_HEIGHT][WORLD_WIDTH]);
 void fallDown(int x, int y, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
               char world[WORLD_HEIGHT][WORLD_WIDTH], int& currentScore);
 
-void initworld(char world[WORLD_HEIGHT][WORLD_WIDTH]);
+void initWorld(char world[WORLD_HEIGHT][WORLD_WIDTH]);
 
 void updateScore(int& currentScore, int lineCleared);
 
-void upgradeLevel(int currentScore,int&currentLevel, int& fallSpeed, int& MaxFallSpeed);
+void upgradeLevel(int currentScore,int& currentLevel, int& fallSpeed, int& MaxFallSpeed);
 
+void setupNewGames(Player_Data_t& player, World_Data_t& world, char map[WORLD_HEIGHT][WORLD_WIDTH]);
 
 #endif //PEZZITETRIS_SHAPE_H
 

@@ -289,7 +289,7 @@ void fallDown(int x, int y, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_W
     placeIt(y, x, shape, typeShape, world, currentScore);
 }
 
-void initworld(char** world){
+void initWorld(char world[WORLD_HEIGHT][WORLD_WIDTH]){
     for(int i = 0; i < WORLD_HEIGHT; i++) {
         for (int j = 0; j < WORLD_WIDTH; j++) {
             world[i][j] = EMPTY_SPACE;
@@ -316,5 +316,13 @@ void upgradeLevel(int currentScore,int&currentLevel, int& fallSpeed, int& MaxFal
     if(fallSpeed > MaxFallSpeed) {
         fallSpeed = MaxFallSpeed;
     }
+}
+
+void setupNewGames(Player_Data_t& player, World_Data_t& world, char map[WORLD_HEIGHT][WORLD_WIDTH]) {
+    player.score = 0;
+    player.rotation=0;
+    world.level = 1;
+    world.fallSpeed= 50;
+    initWorld(map);
 }
 
