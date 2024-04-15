@@ -49,25 +49,8 @@ TextStyle_t info = {
     .foreground = {255, 255, 255, 255}
 };
 
-typedef struct Player_Data {
-    int x;
-    int y;
-    int rotation;
-    Easy_Asset_t* piece;
-    int assetIdx;
-    int score = 0;
-} Player_Data_t;
 
 Player_Data_t playerOne;
-
-typedef struct World_Data {
-    int points = 0;
-    int topScore = 0;
-    int level = 1;
-    int nextBlock  = -1;
-    int fallSpeed = 50;
-
-} World_Data_t;
 
 World_Data_t currentGame;
 
