@@ -114,7 +114,6 @@ void handleInput() {
 }
 
 
-//TODO implement function draw background
 void drawBackground() {
     Easy_Asset_t *asset = loadAsset("assets/grafica/game.png");
     drawAsset(0,0, asset);
@@ -183,7 +182,7 @@ void drawInfo(Player_Data_t player) {
 
         for(int i = 0; i < SHAPE_HEIGHT; i++){
             for(int j = 0; j < SHAPE_WIDTH; j++){
-                char point = blocks[currentGame.nextBlock][player.rotation][i][j];
+                char point = blocks[currentGame.nextBlock][NULL][i][j];
             if(point != ' '){
                 Easy_Asset_t *block = loadAsset(assetsOrigin[point - '1']);
                 drawAsset(
@@ -212,7 +211,6 @@ void drawWorld() {
     }
 }
 
-//TODO implement function draw player block
 void drawPlayerBlock(Player_Data_t player) {
     for(int i = 0; i < SHAPE_HEIGHT; i++){
         for(int j = 0; j < SHAPE_WIDTH; j++){
@@ -230,23 +228,18 @@ void drawPlayerBlock(Player_Data_t player) {
 }
 
 
-
 void drawGame(){
          // Clear the screen
             SDL_Renderer *renderer = getSDLRender();
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
             SDL_RenderClear(renderer);
 
-        //TODO drawbackground
             drawBackground();
 
-        //TODO drawpoints and all the text info
             drawInfo(playerOne);
 
-        //TODO drawworld
             drawWorld();
 
-        //TODO draw the playerblock
             drawPlayerBlock(playerOne);
 
             int currentTime = SDL_GetTicks();
@@ -259,10 +252,6 @@ void drawGame(){
 
 
         //TODO check that after the call to placeIt we have to generate a new block
-
-
-
-
 
             SDL_RenderPresent(renderer);
 }
@@ -379,7 +368,6 @@ void drawMenu() {
     // Update the screen
     SDL_RenderPresent(renderer);
 }
-
 
 void pause(SDL_Event* e){
     if (e->type == SDL_QUIT) {
@@ -562,6 +550,7 @@ int main(int argc, char** args) {
         if(gestore_eventi == &credits){
             drawCredits();
         }
+
         SDL_Delay(10);
     }
 
