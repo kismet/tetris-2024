@@ -197,10 +197,10 @@ void drawInfo(Player_Data_t player) {
                 );
         }
 
-
+        const int NO_ROTATION = 0;
         for(int i = 0; i < SHAPE_HEIGHT; i++){
             for(int j = 0; j < SHAPE_WIDTH; j++){
-                char point = blocks[currentGame.nextBlock][NULL][i][j];
+                char point = blocks[currentGame.nextBlock][NO_ROTATION][i][j];
             if(point != ' '){
                 Easy_Asset_t *block = loadAsset(assetsOrigin[point - '1']);
                 drawAsset(
