@@ -120,7 +120,7 @@ void drawBackground() {
     drawAsset(0,0, asset);
 }
 
-void drawInfo() {
+void drawInfo(Player_Data_t player) {
     setTextStyle(&info);
 
     const int N_INFO = 3;
@@ -135,6 +135,9 @@ void drawInfo() {
         int startSize = 1000;
         int startY = 200;
         int x = 235;
+
+        int nextBlockY = 460;
+        int nextBlockX = 1095;
 
         if(playerOne.score > 0){
             int textSize = 15 * playerOne.score / 10 ;
@@ -176,8 +179,22 @@ void drawInfo() {
                 textInfo[2], TEXT_LEFT
                 );
         }
-}
 
+
+        for(int i = 0; i < SHAPE_HEIGHT; i++){
+            for(int j = 0; j < SHAPE_WIDTH; j++){
+                char point = blocks[currentGame.nextBlock][player.rotation][i][j];
+            if(point != ' '){
+                Easy_Asset_t *block = loadAsset(assetsOrigin[point - '1']);
+                drawAsset(
+                          nextBlockX + j * 32,
+                          nextBlockY + i * 32,
+                          block
+                          );
+            }
+        }
+    }
+}
 
 //TODO fix segmentation fault
 void drawWorld() {
@@ -215,16 +232,16 @@ void drawPlayerBlock(Player_Data_t player) {
 
 
 void drawGame(){
-     // Clear the screen
-        SDL_Renderer *renderer = getSDLRender();
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderClear(renderer);
+         // Clear the screen
+            SDL_Renderer *renderer = getSDLRender();
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+            SDL_RenderClear(renderer);
 
-    //TODO drawbackground
-        drawBackground();
+        //TODO drawbackground
+            drawBackground();
 
-    //TODO drawpoints and all the text info
-        drawInfo();
+        //TODO drawpoints and all the text info
+            drawInfo(playerOne);
 
         //TODO drawworld
             drawWorld();
