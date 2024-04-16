@@ -27,6 +27,17 @@ TextStyle_t normal = {
         .foreground = {255, 255,255, 255}
 };
 
+TextStyle_t score = {
+        .solid = true,
+        .size = 10,
+        .italic = false,
+        .underline = false,
+        .bold = false,
+        .strikethrough = false,
+        .font = NULL,
+        .foreground = {255, 255,255, 255}
+};
+
 TextStyle_t highlight = {
         .solid = true,
         .size = 42,
@@ -149,9 +160,8 @@ void drawInfo(Player_Data_t player) {
         if(playerOne.score > 0){
             int textSize = 15 * playerOne.score / 10 ;
 
-            TextStyle_t textStyle = info;
-            textStyle.size = textSize;
-            setTextStyle(&textStyle);
+            score.size = textSize;
+            setTextStyle(&score);
 
             drawText(
                 (uint16_t ) (x-10) + currentGame.topScore / 10000,(uint16_t ) startY,
@@ -537,6 +547,7 @@ int main(int argc, char** args) {
     normal.font = loadAsset("assets/fonts/ka1.ttf");
     highlight.font = normal.font;
     info.font = loadAsset("assets/fonts/Monaco.ttf");
+    score.font = info.font;
     gestore_eventi =  &menu;
 
 
