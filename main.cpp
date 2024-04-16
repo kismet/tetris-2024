@@ -70,6 +70,9 @@ char* MENU_OPTIONS[MENU_OPTIONS_COUNT] = {"Start Game","Credits", "Quit"};
 const int PAUSE_OPTIONS_COUNT = 3;
 char* PAUSE_OPTIONS[PAUSE_OPTIONS_COUNT] = {"New Game", "Resume", "Menu"};
 
+const int CREDITS_COUNT = 1;
+char* CREDITS_OPTIONS[CREDITS_COUNT] = {"Menu"};
+
 int selectedOption = 0;
 
 void menu(SDL_Event*);
@@ -93,6 +96,7 @@ char* assetsOrigin[]  = {
     "assets/grafica/menu.png",
     "assets/grafica/game.png",
     "assets/grafica/pausa.png",
+    "assets/grafica/titoli_coda.png",
     "assets/fonts/ka1.ttf",
     "assets/fonts/Monaco.ttf",
 };
@@ -483,35 +487,11 @@ void credits(SDL_Event* e){
         exit(0);
     } else if (e->type == SDL_KEYDOWN) {
         switch (e->key.keysym.sym) {
-            case SDLK_UP:
-                selectedOption = (selectedOption - 1 + MENU_OPTIONS_COUNT) % MENU_OPTIONS_COUNT;
-                break;
-            case SDLK_w:
-                selectedOption = (selectedOption - 1 + MENU_OPTIONS_COUNT) % MENU_OPTIONS_COUNT;
-                break;
-            case SDLK_s:
-                 selectedOption = (selectedOption + 1) % MENU_OPTIONS_COUNT;
-                break;
-            case SDLK_DOWN:
-                selectedOption = (selectedOption + 1) % MENU_OPTIONS_COUNT;
-                break;
             case SDLK_RETURN:
                 switch (selectedOption) {
                     case 0:
-                        cout << "Starting the game..." << endl;
-                        //TODO inizializzare la matrice world[][] e tutte le variabili relative (punteggio, level, etc.
-                        setupNewGames(playerOne, currentGame, world);
-                        gestore_eventi = &game;
-                        break;
-                    case 1:
-                        cout << "Credits..." << endl;
-                        gestore_eventi = &credits;
-                        break;
-                    case 2:
-                        exit(0);
-                        break;
-                    default:
-
+                        cout << "Back to menu..." << endl;
+                        gestore_eventi = &menu;
                         break;
                 }
                 break;
@@ -526,29 +506,23 @@ void drawCredits(){
     SDL_RenderClear(renderer);
 
     // Draw the background image
-    Easy_Asset_t *asset = loadAsset("assets/grafica/menu.png");
+    Easy_Asset_t *asset = loadAsset("assets/grafica/titoli_coda.png");
     drawAsset(0,0, asset);
 
     normal.size = 42;
     highlight.size = 42;
 
-    // Draw menu options
-    int startY = (SCREEN_HEIGHT - MENU_OPTIONS_COUNT ) / 2;
-    for (int i = 0; i < MENU_OPTIONS_COUNT; ++i) {
-        int x = SCREEN_WIDTH / 2;
-        int y = startY + i * 100;
-        bool isSelected = (i == selectedOption);
-        if(isSelected){
-            setTextStyle(&highlight);
-        }else{
-            setTextStyle(&normal);
-        }
+    selectedOption = 0;
+    setTextStyle(&highlight);
+
+    int y = (SCREEN_HEIGHT - CREDITS_COUNT ) / 2 + 300;
+    int x = SCREEN_WIDTH / 2;
+
         drawText(
                 (uint16_t ) x,(uint16_t ) y,
-                (uint16_t ) SCREEN_WIDTH, (uint16_t ) 50,
-                MENU_OPTIONS[i], TEXT_CENTERED
+                (uint16_t ) SCREEN_WIDTH, (uint16_t ) 60,
+                CREDITS_OPTIONS[0], TEXT_CENTERED
         );
-    }
 
     // Update the screen
     SDL_RenderPresent(renderer);
