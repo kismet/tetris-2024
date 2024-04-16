@@ -539,11 +539,27 @@ void drawCredits(){
 }
 
 
+bool precachingAssets(){
+    int len = sizeof(assets)/sizeof(Easy_Asset_t*);
+    for(int i = 0 ; i < len; i++){
+        assets[i] = loadAsset(assetsOrigin[i]);
+        if(assets[i] == NULL){
+            cerr<<"Failed to load assets located at "<<assetsOrigin[i]<<endl;
+            return false;
+        }
+    }
+    return true;
+}
+
 int main(int argc, char** args) {
     bool quit = false;
 
     initEasySDL("Tetris 2024", SCREEN_WIDTH , SCREEN_HEIGHT,
                 (uint32_t) EASY_SDL_DEFAULT_WINDOW_OPTIONS);
+    if ( precachingAssets() == false ) {
+        freeEasySDL();
+        exit(1);
+    };
     normal.font = loadAsset("assets/fonts/ka1.ttf");
     highlight.font = normal.font;
     info.font = loadAsset("assets/fonts/Monaco.ttf");
