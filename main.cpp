@@ -313,6 +313,10 @@ void game(SDL_Event* e){
                                 playerOne.rotation = nextRotation;
                              }
                             break;
+                        case SDLK_SPACE:
+                            fallDown(playerOne.x, playerOne.y, playerOne.rotation, blocks, playerOne.assetIdx, world, playerOne, playerOne.score);
+                            newBlock(playerOne, currentGame);
+                            break;
                     }
         }
 }
