@@ -234,28 +234,34 @@ bool isColliding(int y, int x, int rotation, char shape[N_BLOCKS][ROTATION][SHAP
 }
 
 
-void placeIt(int y,int x, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
-             char world[WORLD_HEIGHT][WORLD_WIDTH], int& currentScore){
+void placeIt(int y, int x, int rotation, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
+                  char world[WORLD_HEIGHT][WORLD_WIDTH], Player_Data_t playerOne, int& currentScore){
 
     for(int i = 0; i < SHAPE_HEIGHT; i++){
         for(int j = 0; j < SHAPE_WIDTH; j++){
-            if (shape[N_BLOCKS][typeShape][i][j] != ' ') {
+            if (shape[playerOne.assetIdx][rotation][i][j] != ' ') {
                 int worldX = x + j;
                 int worldY = y + i;
-                world[worldY][worldX] = shape[N_BLOCKS][typeShape][i][j];
+                world[worldY][worldX] = shape[playerOne.assetIdx][rotation][i][j];
             }
         }
     }
 
     int deletedLines = 0;
 
-    for(int i = 0; i < WORLD_HEIGHT; i++) {
+    if(deletedLines == 0) {
+        currentScore += 30;
+    }
+    else{
+        for(int i = 0; i < WORLD_HEIGHT; i++) {
         if(isLineComplete(i, world)) {
             deleteLine(i, world);
             deletedLines++;
         }
     }
     updateScore(currentScore, deletedLines);
+
+    }
 
 }
 
@@ -283,13 +289,12 @@ void deleteLine(int line, char world[WORLD_HEIGHT][WORLD_WIDTH]){
 }
 
 void fallDown(int x, int y, int rotation, char  shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
-              char world[WORLD_HEIGHT][WORLD_WIDTH], int& currentScore, Player_Data_t playerOne) {
+              char world[WORLD_HEIGHT][WORLD_WIDTH], Player_Data_t playerOne, int& currentScore) {
 
     while (!isColliding(y + 1, x,rotation, shape, typeShape, world, playerOne)) {
         y++;
     }
-
-    placeIt(y, x, shape, typeShape, world, currentScore);
+    placeIt(y, x, rotation, shape, typeShape, world, playerOne, currentScore);
 }
 
 void initWorld(char world[WORLD_HEIGHT][WORLD_WIDTH]){
@@ -310,10 +315,10 @@ void updateScore(int& currentScore, int lineCleared) {
 //TODO funzione per upgradeLevel controlla il numero di linee o punteggio e aumenta velocità
 void upgradeLevel(int currentScore,int&currentLevel, int& fallSpeed, int& MaxFallSpeed) {
 
-    int targetScore = currentLevel * 10000 + 10000;
+    int targetScore = currentLevel * 500 + 500;
 
     if(currentScore >= targetScore) {
-        fallSpeed += 100; //TODO verificare se la velocita e' adeguata
+        fallSpeed -= 200;
         currentLevel++;
     }
     if(fallSpeed > MaxFallSpeed) {
@@ -321,7 +326,7 @@ void upgradeLevel(int currentScore,int&currentLevel, int& fallSpeed, int& MaxFal
     }
 }
 
-//TODO risolvere il problema del crush
+//TODO risolvere il problema del crash
 int randIndex() {
 
     static random_device rd;
@@ -345,6 +350,6 @@ void setupNewGames(Player_Data_t& player, World_Data_t& world, char map[WORLD_HE
    // player.assetIdx = 6;
     world.nextBlock = randIndex();
     player.x = 3;
-    player.y =  -1;
+    player.y =  0;
 }
 

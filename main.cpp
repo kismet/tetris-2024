@@ -60,6 +60,8 @@ const int SCREEN_WIDTH = 1400;
 const int SCREEN_HEIGHT = 938;
 
 int nextRotation;
+int nextY;
+int nextX;
 
 const int MENU_OPTIONS_COUNT = 3;
 char* MENU_OPTIONS[MENU_OPTIONS_COUNT] = {"Start Game","Credits", "Quit"};
@@ -229,6 +231,13 @@ void drawPlayerBlock(Player_Data_t player) {
     }
 }
 
+void newBlock(Player_Data_t& playerOne, World_Data_t& currentGame){
+        playerOne.y = 0;
+        playerOne.x = 3;
+        playerOne.assetIdx = currentGame.nextBlock;
+        currentGame.nextBlock = randIndex();
+}
+
 
 void drawGame(){
          // Clear the screen
@@ -248,14 +257,20 @@ void drawGame(){
             int s = currentTime - currentGame.lastTime;
 
             if (s >= currentGame.fallSpeed) {
-                    playerOne.y += 1;
-                    currentGame.lastTime = currentTime;
+                    if (!isColliding(playerOne.y + 1, playerOne.x,playerOne.rotation, blocks, playerOne.assetIdx, world, playerOne)) {
+                        playerOne.y += 1;
+                        currentGame.lastTime = currentTime;
+                    }
+                    else {
+                        placeIt(playerOne.y, playerOne.x, playerOne.rotation, blocks, playerOne.assetIdx, world, playerOne, playerOne.score);
+                        newBlock(playerOne, currentGame);
+                    }
             }
 
 
-        //TODO check that after the call to placeIt we have to generate a new block
 
-            SDL_RenderPresent(renderer);
+
+        SDL_RenderPresent(renderer);
 }
 
 
@@ -270,17 +285,21 @@ void game(SDL_Event* e){
         else if(e->type == SDL_KEYDOWN){
             switch(e->key.keysym.sym){
                         case SDLK_s:
-                            playerOne.y += 1;
+                            nextY = playerOne.y + 1;
+                            if (!isColliding(nextY, playerOne.x,playerOne.rotation, blocks, playerOne.assetIdx, world, playerOne)) {
+                                playerOne.y = nextY;
+                            }
                             break;
                         case SDLK_a:
-                            if (!isColliding(playerOne.y, playerOne.x - 1,playerOne.rotation, blocks, playerOne.assetIdx, world, playerOne)) {
-                            playerOne.x -= 1;
+                            nextX = playerOne.x - 1;
+                            if (!isColliding(playerOne.y,nextX,playerOne.rotation, blocks, playerOne.assetIdx, world, playerOne)) {
+                            playerOne.x = nextX;
                             }
                             break;
                         case SDLK_d:
-                            //TODO fix isColliding issues
-                            if (!isColliding(playerOne.y, playerOne.x + 1,playerOne.rotation, blocks, playerOne.assetIdx, world, playerOne)) {
-                            playerOne.x += 1;
+                           nextX  = playerOne.x +1;
+                            if (!isColliding(playerOne.y, nextX,playerOne.rotation, blocks, playerOne.assetIdx, world, playerOne)) {
+                            playerOne.x = nextX;
                             }
                             break;
                         case SDLK_q:

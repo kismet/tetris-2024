@@ -42,17 +42,19 @@ extern char blocks[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH];
 bool isColliding(int y, int x, int rotation, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
                   char world[WORLD_HEIGHT][WORLD_WIDTH], Player_Data_t playerOne);
 
-void placeIt(int y,int x, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
-             char world[WORLD_HEIGHT][WORLD_WIDTH], int& currentScore);
+void placeIt(int y, int x, int rotation, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
+                  char world[WORLD_HEIGHT][WORLD_WIDTH], Player_Data_t playerOne, int& currentScore);
 
 bool isLineComplete(int line, char world[WORLD_HEIGHT][WORLD_WIDTH]);
 
 void deleteLine(int line, char world[WORLD_HEIGHT][WORLD_WIDTH]);
 
 void fallDown(int x, int y, int rotation, char  shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
-              char world[WORLD_HEIGHT][WORLD_WIDTH], int& currentScore, Player_Data_t playerOne);
+              char world[WORLD_HEIGHT][WORLD_WIDTH], Player_Data_t playerOne, int& currentScore);
 
 void initWorld(char world[WORLD_HEIGHT][WORLD_WIDTH]);
+
+int randIndex();
 
 void updateScore(int& currentScore, int lineCleared);
 
