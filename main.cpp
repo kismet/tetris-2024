@@ -555,7 +555,7 @@ int main(int argc, char** args) {
     bool quit = false;
 
     initEasySDL("Tetris 2024", SCREEN_WIDTH , SCREEN_HEIGHT,
-                (uint32_t) EASY_SDL_DEFAULT_WINDOW_OPTIONS);
+                (uint32_t) EASY_SDL_DEFAULT_WINDOW_OPTIONS | SDL_WINDOW_BORDERLESS);
     if ( precachingAssets() == false ) {
         freeEasySDL();
         exit(1);
