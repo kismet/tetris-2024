@@ -215,7 +215,7 @@ bool isColliding(int y, int x, int rotation, char shape[N_BLOCKS][ROTATION][SHAP
 
     for(int i = 0; i < shapeRows;i++){
         for(int j = 0; j < shapeCols; j++){
-            if (shape[playerOne.assetIdx][rotation][i][j] != ' ') {
+            if (shape[playerOne.assetIdx][rotation][i][j] != EMPTY_SPACE ) {
                 int worldY = y + i;
                 int worldX = x + j;
 
@@ -223,8 +223,8 @@ bool isColliding(int y, int x, int rotation, char shape[N_BLOCKS][ROTATION][SHAP
                     collision = true;
                 }
 
-                if(world[worldY][worldX] != ' '){
                     collision = true;
+                if(world[worldY][worldX] != EMPTY_SPACE ){
                 }
             }
         }
@@ -239,7 +239,7 @@ void placeIt(int y, int x, int rotation, char shape[N_BLOCKS][ROTATION][SHAPE_HE
 
     for(int i = 0; i < SHAPE_HEIGHT; i++){
         for(int j = 0; j < SHAPE_WIDTH; j++){
-            if (shape[playerOne.assetIdx][rotation][i][j] != ' ') {
+            if (shape[playerOne.assetIdx][rotation][i][j] != EMPTY_SPACE ) {
                 int worldX = x + j;
                 int worldY = y + i;
                 world[worldY][worldX] = shape[playerOne.assetIdx][rotation][i][j];
@@ -284,7 +284,7 @@ void deleteLine(int line, char world[WORLD_HEIGHT][WORLD_WIDTH]){
         }
     }
     for(int j = 0; j < WORLD_WIDTH; j++) {
-        world[0][j] = ' ';
+        world[0][j] = EMPTY_SPACE;
     }
 }
 
