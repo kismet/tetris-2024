@@ -199,7 +199,6 @@ void drawInfo(Player_Data_t player) {
     }
 }
 
-//TODO fix segmentation fault
 void drawWorld() {
     for(int i = 0; i < WORLD_HEIGHT; i++){
         for(int j = 0; j < WORLD_WIDTH; j++) {
@@ -238,7 +237,7 @@ void newBlock(Player_Data_t& playerOne, World_Data_t& currentGame){
         currentGame.nextBlock = randIndex();
 }
 
-
+//TODO block in assetsOrigin[4] made a crash
 void drawGame(){
          // Clear the screen
             SDL_Renderer *renderer = getSDLRender();
