@@ -338,12 +338,12 @@ void setupNewGames(Player_Data_t& player, World_Data_t& world, char map[WORLD_HE
     player.score = 0;
     player.rotation=0;
     world.level = 1;
-    world.fallSpeed= 50;
+    world.fallSpeed= 1000;
     initWorld(map);
     player.assetIdx = randIndex();
    // player.assetIdx = 6;
     world.nextBlock = randIndex();
     player.x = 3;
-    player.y =  0;
+    player.y =  -1;
 }
 

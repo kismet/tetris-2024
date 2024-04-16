@@ -261,9 +261,26 @@ void game(SDL_Event* e){
         }
         else if(e->type == SDL_KEYDOWN){
             switch(e->key.keysym.sym){
-                        case SDLK_s: playerOne.y += 1; break;
-                        case SDLK_a: playerOne.x -= 1; break;
-                        case SDLK_d: playerOne.x += 1; break;
+                        case SDLK_s:
+                            playerOne.y += 1;
+                            break;
+                        case SDLK_a:
+                            if (!isColliding(playerOne.y, playerOne.x - 1, blocks, playerOne.assetIdx, world)) {
+                            playerOne.x -= 1;
+                            }
+                            break;
+                        case SDLK_d:
+                            //TODO fix isColliding issues
+                            if (!isColliding(playerOne.y, playerOne.x + 1, blocks, playerOne.assetIdx, world)) {
+                            playerOne.x += 1;
+                            }
+                            break;
+                        case SDLK_q:
+                            playerOne.rotation = (playerOne.rotation - 1 + ROTATION) % ROTATION;
+                            break;
+                        case SDLK_e:
+                            playerOne.rotation = (playerOne.rotation + 1) % ROTATION;
+                            break;
                     }
         }
 }
