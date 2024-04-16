@@ -220,17 +220,17 @@ bool isColliding(int y, int x, int rotation, char shape[N_BLOCKS][ROTATION][SHAP
                 int worldX = x + j;
 
                 if (worldX < 0 || worldX >= WORLD_WIDTH || worldY < 0 || worldY >= WORLD_HEIGHT) {
-                    collision = true;
+                    return true;
                 }
 
-                    collision = true;
                 if(world[worldY][worldX] != EMPTY_SPACE ){
+                    return true;
                 }
             }
         }
     }
 
-    return collision;
+    return false;
 }
 
 
