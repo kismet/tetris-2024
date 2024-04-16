@@ -282,13 +282,13 @@ void game(SDL_Event* e){
                             playerOne.y += 1;
                             break;
                         case SDLK_a:
-                            if (!isColliding(playerOne.y, playerOne.x - 1, blocks, playerOne.assetIdx, world)) {
+                            if (!isColliding(playerOne.y, playerOne.x - 1, blocks, playerOne.assetIdx, world, playerOne)) {
                             playerOne.x -= 1;
                             }
                             break;
                         case SDLK_d:
                             //TODO fix isColliding issues
-                            if (!isColliding(playerOne.y, playerOne.x + 1, blocks, playerOne.assetIdx, world)) {
+                            if (!isColliding(playerOne.y, playerOne.x + 1, blocks, playerOne.assetIdx, world, playerOne)) {
                             playerOne.x += 1;
                             }
                             break;

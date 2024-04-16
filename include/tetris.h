@@ -40,7 +40,7 @@ extern char blocks[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH];
 
 
 bool isColliding(int y, int x, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
-                  char world[WORLD_HEIGHT][WORLD_WIDTH]);
+                  char world[WORLD_HEIGHT][WORLD_WIDTH], Player_Data_t playerOne);
 
 void placeIt(int y,int x, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
              char world[WORLD_HEIGHT][WORLD_WIDTH], int& currentScore);

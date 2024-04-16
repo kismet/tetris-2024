@@ -207,7 +207,7 @@ char blocks[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH] = {
 
 
 bool isColliding(int y, int x, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
-                  char world[WORLD_HEIGHT][WORLD_WIDTH]){
+                  char world[WORLD_HEIGHT][WORLD_WIDTH], Player_Data_t playerOne){
     bool collision = false;
 
     int shapeRows = SHAPE_HEIGHT;
@@ -215,13 +215,14 @@ bool isColliding(int y, int x, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAP
 
     for(int i = 0; i < shapeRows;i++){
         for(int j = 0; j < shapeCols; j++){
-            if (shape[N_BLOCKS][typeShape][i][j] != ' ') {
+            if (shape[playerOne.assetIdx][playerOne.rotation][i][j] != ' ') {
                 int worldY = y + i;
                 int worldX = x + j;
 
                 if (worldX < 0 || worldX >= WORLD_WIDTH || worldY < 0 || worldY >= WORLD_HEIGHT) {
                     collision = true;
                 }
+
                 if(world[worldY][worldX] != ' '){
                     collision = true;
                 }
@@ -282,9 +283,9 @@ void deleteLine(int line, char world[WORLD_HEIGHT][WORLD_WIDTH]){
 }
 
 void fallDown(int x, int y, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
-              char world[WORLD_HEIGHT][WORLD_WIDTH], int& currentScore) {
+              char world[WORLD_HEIGHT][WORLD_WIDTH], int& currentScore, Player_Data_t playerOne) {
 
-    while (!isColliding(y + 1, x, shape, typeShape, world)) {
+    while (!isColliding(y + 1, x, shape, typeShape, world, playerOne)) {
         y++;
     }
 
