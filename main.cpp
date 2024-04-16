@@ -35,7 +35,7 @@ TextStyle_t highlight = {
         .bold = false,
         .strikethrough = false,
         .font = NULL,
-        .foreground = {255, 0,0, 255}
+        .foreground = {255, 255,0, 255}
 };
 
 TextStyle_t info = {
