@@ -59,6 +59,8 @@ static char world[WORLD_HEIGHT][WORLD_WIDTH];
 const int SCREEN_WIDTH = 1400;
 const int SCREEN_HEIGHT = 938;
 
+int nextRotation;
+
 const int MENU_OPTIONS_COUNT = 3;
 char* MENU_OPTIONS[MENU_OPTIONS_COUNT] = {"Start Game","Credits", "Quit"};
 
@@ -271,21 +273,27 @@ void game(SDL_Event* e){
                             playerOne.y += 1;
                             break;
                         case SDLK_a:
-                            if (!isColliding(playerOne.y, playerOne.x - 1, blocks, playerOne.assetIdx, world, playerOne)) {
+                            if (!isColliding(playerOne.y, playerOne.x - 1,playerOne.rotation, blocks, playerOne.assetIdx, world, playerOne)) {
                             playerOne.x -= 1;
                             }
                             break;
                         case SDLK_d:
                             //TODO fix isColliding issues
-                            if (!isColliding(playerOne.y, playerOne.x + 1, blocks, playerOne.assetIdx, world, playerOne)) {
+                            if (!isColliding(playerOne.y, playerOne.x + 1,playerOne.rotation, blocks, playerOne.assetIdx, world, playerOne)) {
                             playerOne.x += 1;
                             }
                             break;
                         case SDLK_q:
-                            playerOne.rotation = (playerOne.rotation - 1 + ROTATION) % ROTATION;
+                            nextRotation = (playerOne.rotation - 1 + ROTATION) %ROTATION;
+                            if (!isColliding(playerOne.y, playerOne.x, nextRotation, blocks, playerOne.assetIdx, world, playerOne)){
+                                playerOne.rotation = nextRotation;
+                            }
                             break;
                         case SDLK_e:
-                            playerOne.rotation = (playerOne.rotation + 1) % ROTATION;
+                            nextRotation = (playerOne.rotation + 1 + ROTATION)%ROTATION;
+                             if (!isColliding(playerOne.y, playerOne.x + 1,nextRotation, blocks, playerOne.assetIdx, world, playerOne)){
+                                playerOne.rotation = nextRotation;
+                             }
                             break;
                     }
         }

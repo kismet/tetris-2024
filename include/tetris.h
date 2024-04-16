@@ -39,7 +39,7 @@ extern char blocks[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH];
 //void stampa(char Mat[][SHAPE_HEIGHT][SHAPE_WIDTH], const int MAX);
 
 
-bool isColliding(int y, int x, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
+bool isColliding(int y, int x, int rotation, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
                   char world[WORLD_HEIGHT][WORLD_WIDTH], Player_Data_t playerOne);
 
 void placeIt(int y,int x, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
@@ -49,8 +49,8 @@ bool isLineComplete(int line, char world[WORLD_HEIGHT][WORLD_WIDTH]);
 
 void deleteLine(int line, char world[WORLD_HEIGHT][WORLD_WIDTH]);
 
-void fallDown(int x, int y, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
-              char world[WORLD_HEIGHT][WORLD_WIDTH], int& currentScore);
+void fallDown(int x, int y, int rotation, char  shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
+              char world[WORLD_HEIGHT][WORLD_WIDTH], int& currentScore, Player_Data_t playerOne);
 
 void initWorld(char world[WORLD_HEIGHT][WORLD_WIDTH]);
 
