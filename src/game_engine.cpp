@@ -249,18 +249,18 @@ void placeIt(int y, int x, int rotation, char shape[N_BLOCKS][ROTATION][SHAPE_HE
 
     int deletedLines = 0;
 
-    if(deletedLines == 0) {
-        currentScore += 30;
-    }
-    else{
-        for(int i = 0; i < WORLD_HEIGHT; i++) {
+    for(int i = 0; i < WORLD_HEIGHT; i++) {
         if(isLineComplete(i, world)) {
             deleteLine(i, world);
             deletedLines++;
         }
     }
-    updateScore(currentScore, deletedLines);
 
+    if(deletedLines == 0) {
+        currentScore += 30;
+    }
+    else if (deletedLines > 0) {
+        updateScore(currentScore, deletedLines);
     }
 
 }
