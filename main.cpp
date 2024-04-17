@@ -538,7 +538,7 @@ void drawCredits(){
     SDL_RenderPresent(renderer);
 }
 
-
+/*
 bool precachingAssets(){
     int len = sizeof(assets)/sizeof(Easy_Asset_t*);
     for(int i = 0 ; i < len; i++){
@@ -550,16 +550,17 @@ bool precachingAssets(){
     }
     return true;
 }
+*/
 
 int main(int argc, char** args) {
     bool quit = false;
 
     initEasySDL("Tetris 2024", SCREEN_WIDTH , SCREEN_HEIGHT,
                 (uint32_t) EASY_SDL_DEFAULT_WINDOW_OPTIONS | SDL_WINDOW_BORDERLESS);
-    if ( precachingAssets() == false ) {
+   /* if ( precachingAssets() == false ) {
         freeEasySDL();
         exit(1);
-    };
+    }; */
     normal.font = loadAsset("assets/fonts/ka1.ttf");
     highlight.font = normal.font;
     info.font = loadAsset("assets/fonts/Monaco.ttf");
