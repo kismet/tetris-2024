@@ -7,7 +7,7 @@ const int SHAPE_WIDTH = MAX;
 const int SHAPE_HEIGHT = MAX;
 const int FALL_SPEED_LIMIT = 100;
 
-const int WORLD_HEIGHT = 24 + 4;
+const int WORLD_HEIGHT = 24 + SHAPE_HEIGHT;
 const int WORLD_WIDTH = 10;
 const char EMPTY_SPACE = ' ';
 
