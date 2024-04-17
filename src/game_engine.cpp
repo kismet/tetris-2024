@@ -205,6 +205,16 @@ char blocks[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH] = {
         }
 };
 
+bool gameOver(char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], Player_Data_t player,
+              char world[WORLD_HEIGHT][WORLD_WIDTH]) {
+    player.y = 0;
+    player.x = 3;
+
+    if (isColliding(player.y, player.x, player.rotation, shape, player.assetIdx, world, player)) {
+        return true;
+    }
+    return false;
+}
 
 bool isColliding(int y, int x, int rotation, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
                   char world[WORLD_HEIGHT][WORLD_WIDTH], Player_Data_t playerOne){

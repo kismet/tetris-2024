@@ -38,6 +38,8 @@ extern char blocks[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH];
 
 //void stampa(char Mat[][SHAPE_HEIGHT][SHAPE_WIDTH], const int MAX);
 
+bool gameOver(char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], Player_Data_t player,
+              char world[WORLD_HEIGHT][WORLD_WIDTH]);
 
 bool isColliding(int y, int x, int rotation, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
                   char world[WORLD_HEIGHT][WORLD_WIDTH], Player_Data_t playerOne);
