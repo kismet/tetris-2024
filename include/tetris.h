@@ -38,29 +38,29 @@ extern char blocks[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH];
 
 //void stampa(char Mat[][SHAPE_HEIGHT][SHAPE_WIDTH], const int MAX);
 
-bool gameOver(char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], Player_Data_t player,
+bool gameOver(Player_Data_t playerOne, World_Data_t currentGame, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH],
               char world[WORLD_HEIGHT][WORLD_WIDTH]);
 
-bool isColliding(int y, int x, int rotation, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
-                  char world[WORLD_HEIGHT][WORLD_WIDTH], Player_Data_t playerOne);
+bool isColliding(int y, int x, int rotation, Player_Data_t playerOne, World_Data_t currentGame, char  shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH],
+              char world[WORLD_HEIGHT][WORLD_WIDTH]);
 
-void placeIt(int y, int x, int rotation, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
-                  char world[WORLD_HEIGHT][WORLD_WIDTH], Player_Data_t playerOne, int& currentScore);
+void placeIt(Player_Data_t playerOne, World_Data_t currentGame, char  shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH],
+              char world[WORLD_HEIGHT][WORLD_WIDTH], int& currentScore);
 
 bool isLineComplete(int line, char world[WORLD_HEIGHT][WORLD_WIDTH]);
 
 void deleteLine(int line, char world[WORLD_HEIGHT][WORLD_WIDTH]);
 
-void fallDown(int x, int y, int rotation, char  shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
-              char world[WORLD_HEIGHT][WORLD_WIDTH], Player_Data_t playerOne, int& currentScore);
+void fallDown(Player_Data_t playerOne, World_Data_t currentGame, char  shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH],
+              char world[WORLD_HEIGHT][WORLD_WIDTH], int& currentScore);
 
 void initWorld(char world[WORLD_HEIGHT][WORLD_WIDTH]);
 
 int randIndex();
 
-void updateScore(int& currentScore, int lineCleared);
+void updateScore(Player_Data_t playerOne, int lineCleared, int& currentScore);
 
-void upgradeLevel(int currentScore,int& currentLevel, int& fallSpeed, int& MaxFallSpeed);
+void upgradeLevel(int currentScore, int& currentLevel, int& fallSpeed, int& MaxFallSpeed);
 
 void setupNewGames(Player_Data_t& player, World_Data_t& world, char map[WORLD_HEIGHT][WORLD_WIDTH]);
 

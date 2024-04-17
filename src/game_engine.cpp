@@ -205,19 +205,19 @@ char blocks[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH] = {
         }
 };
 
-bool gameOver(char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], Player_Data_t player,
+bool gameOver(Player_Data_t playerOne, World_Data_t currentGame, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH],
               char world[WORLD_HEIGHT][WORLD_WIDTH]) {
-    player.y = 0;
-    player.x = 3;
+    playerOne.y = 0;
+    playerOne.x = 3;
 
-    if (isColliding(player.y, player.x, player.rotation, shape, player.assetIdx, world, player)) {
+    if (isColliding(playerOne.y, playerOne.x, playerOne.rotation, playerOne, currentGame, blocks, world)) {
         return true;
     }
     return false;
 }
 
-bool isColliding(int y, int x, int rotation, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
-                  char world[WORLD_HEIGHT][WORLD_WIDTH], Player_Data_t playerOne){
+bool isColliding(int y, int x, int rotation, Player_Data_t playerOne, World_Data_t currentGame, char  shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH],
+              char world[WORLD_HEIGHT][WORLD_WIDTH]){
     bool collision = false;
 
     int shapeRows = SHAPE_HEIGHT;
@@ -244,15 +244,15 @@ bool isColliding(int y, int x, int rotation, char shape[N_BLOCKS][ROTATION][SHAP
 }
 
 
-void placeIt(int y, int x, int rotation, char shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
-                  char world[WORLD_HEIGHT][WORLD_WIDTH], Player_Data_t playerOne, int& currentScore){
+void placeIt(Player_Data_t playerOne, World_Data_t currentGame, char  shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH],
+              char world[WORLD_HEIGHT][WORLD_WIDTH], int& currentScore){
 
     for(int i = 0; i < SHAPE_HEIGHT; i++){
         for(int j = 0; j < SHAPE_WIDTH; j++){
-            if (shape[playerOne.assetIdx][rotation][i][j] != EMPTY_SPACE ) {
-                int worldX = x + j;
-                int worldY = y + i;
-                world[worldY][worldX] = shape[playerOne.assetIdx][rotation][i][j];
+            if (shape[playerOne.assetIdx][playerOne.rotation][i][j] != EMPTY_SPACE ) {
+                int worldX = playerOne.x + j;
+                int worldY = playerOne.y + i;
+                world[worldY][worldX] = shape[playerOne.assetIdx][playerOne.rotation][i][j];
             }
         }
     }
@@ -270,7 +270,7 @@ void placeIt(int y, int x, int rotation, char shape[N_BLOCKS][ROTATION][SHAPE_HE
         currentScore += 30;
     }
     else if (deletedLines > 0) {
-        updateScore(currentScore, deletedLines);
+        updateScore(playerOne, deletedLines, currentScore);
     }
 
 }
@@ -298,13 +298,13 @@ void deleteLine(int line, char world[WORLD_HEIGHT][WORLD_WIDTH]){
     }
 }
 
-void fallDown(int x, int y, int rotation, char  shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH], int typeShape,
-              char world[WORLD_HEIGHT][WORLD_WIDTH], Player_Data_t playerOne, int& currentScore) {
+void fallDown(Player_Data_t playerOne, World_Data_t currentGame, char  shape[N_BLOCKS][ROTATION][SHAPE_HEIGHT][SHAPE_WIDTH],
+              char world[WORLD_HEIGHT][WORLD_WIDTH], int& currentScore) {
 
-    while (!isColliding(y + 1, x,rotation, shape, typeShape, world, playerOne)) {
-        y++;
+    while (!isColliding(playerOne.y  + 1, playerOne.x, playerOne.rotation, playerOne, currentGame, blocks, world)) {
+        playerOne.y++;
     }
-    placeIt(y, x, rotation, shape, typeShape, world, playerOne, currentScore);
+    placeIt(playerOne, currentGame, blocks, world, currentScore);
 }
 
 void initWorld(char world[WORLD_HEIGHT][WORLD_WIDTH]){
@@ -316,14 +316,14 @@ void initWorld(char world[WORLD_HEIGHT][WORLD_WIDTH]){
 }
 
 //TODO funzione updateScore invocata da deleteLine e da placeIt che aggiorna il punteggio
-void updateScore(int& currentScore, int lineCleared) {
+void updateScore(Player_Data_t playerOne, int lineCleared, int& currentScore) {
     int points[] = {100, 200, 400, 800};
 
     currentScore += points[lineCleared];
 }
 
 //TODO funzione per upgradeLevel controlla il numero di linee o punteggio e aumenta velocità
-void upgradeLevel(int currentScore,int&currentLevel, int& fallSpeed, int& MaxFallSpeed) {
+void upgradeLevel(int currentScore, int& currentLevel, int& fallSpeed, int& MaxFallSpeed) {
 
     int targetScore = currentLevel * 500 + 500;
 

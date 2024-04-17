@@ -14,7 +14,6 @@
 using namespace std;
 
 
-static int MaxFallSpeed = 1000;
 
 TextStyle_t normal = {
         .solid = true,
@@ -285,16 +284,16 @@ void drawGame(){
             int s = currentTime - currentGame.lastTime;
 
             if (s >= currentGame.fallSpeed) {
-                    if (!isColliding(playerOne.y + 1, playerOne.x,playerOne.rotation, blocks, playerOne.assetIdx, world, playerOne)) {
+                    if (!isColliding(playerOne.y + 1, playerOne.x, playerOne.rotation,  playerOne, currentGame, blocks, world)) {
                         playerOne.y += 1;
                         currentGame.lastTime = currentTime;
                     }
                     else {
-                        if(gameOver(blocks, playerOne, world)){
+                        if(gameOver(playerOne, currentGame, blocks, world)){
                             cout << "Game Over.." << endl;
                             gestore_eventi = &gameover;
                         }
-                        placeIt(playerOne.y, playerOne.x, playerOne.rotation, blocks, playerOne.assetIdx, world, playerOne, playerOne.score);
+                        placeIt(playerOne, currentGame, blocks, world, playerOne.score);
 
                         if(playerOne.score > currentGame.topScore){
                             currentGame.topScore = playerOne.score;
@@ -303,9 +302,6 @@ void drawGame(){
                     }
 
             }
-
-
-
 
         SDL_RenderPresent(renderer);
 }
@@ -323,36 +319,36 @@ void game(SDL_Event* e){
             switch(e->key.keysym.sym){
     case SDLK_s: case SDLK_DOWN:
                             nextY = playerOne.y + 1;
-                            if (!isColliding(nextY, playerOne.x,playerOne.rotation, blocks, playerOne.assetIdx, world, playerOne)) {
+                            if (!isColliding(nextY, playerOne.x, playerOne.rotation, playerOne, currentGame, blocks, world)) {
                                 playerOne.y = nextY;
                             }
                             break;
                     case SDLK_a: case SDLK_LEFT:
                             nextX = playerOne.x - 1;
-                            if (!isColliding(playerOne.y,nextX,playerOne.rotation, blocks, playerOne.assetIdx, world, playerOne)) {
+                            if (!isColliding(playerOne.y, nextX, playerOne.rotation, playerOne, currentGame, blocks, world)) {
                             playerOne.x = nextX;
                             }
                             break;
                     case SDLK_d: case SDLK_RIGHT:
                            nextX  = playerOne.x +1;
-                            if (!isColliding(playerOne.y, nextX,playerOne.rotation, blocks, playerOne.assetIdx, world, playerOne)) {
+                            if (!isColliding(playerOne.y, nextX, playerOne.rotation, playerOne, currentGame, blocks, world)) {
                             playerOne.x = nextX;
                             }
                             break;
                         case SDLK_q:
                             nextRotation = (playerOne.rotation - 1 + ROTATION) %ROTATION;
-                            if (!isColliding(playerOne.y, playerOne.x, nextRotation, blocks, playerOne.assetIdx, world, playerOne)){
+                            if (!isColliding(playerOne.y, playerOne.x, nextRotation,playerOne, currentGame, blocks, world)){
                                 playerOne.rotation = nextRotation;
                             }
                             break;
                         case SDLK_e:
                             nextRotation = (playerOne.rotation + 1 + ROTATION)%ROTATION;
-                             if (!isColliding(playerOne.y, playerOne.x + 1,nextRotation, blocks, playerOne.assetIdx, world, playerOne)){
+                             if (!isColliding(playerOne.y, playerOne.x, nextRotation, playerOne, currentGame, blocks, world)){
                                 playerOne.rotation = nextRotation;
                              }
                             break;
                         case SDLK_SPACE:
-                            fallDown(playerOne.x, playerOne.y, playerOne.rotation, blocks, playerOne.assetIdx, world, playerOne, playerOne.score);
+                            fallDown(playerOne, currentGame, blocks, world, playerOne.score);
                             newBlock(playerOne, currentGame);
                             break;
                     }
