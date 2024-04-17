@@ -202,7 +202,9 @@ Easy_Asset_t* loadFont(char* path){
     asset->type = ASSET_FONT;
     asset->loaded = true;
     asset->id = context.n_assets;
-    asset->origin = (char *) malloc(strlen(path));
+    //asset->origin = (char *) malloc(strlen(path)); this code generates segmentation fault
+    asset->origin = (char *) malloc(strlen(path) + 1); //We need to add '+1' for storing '\0'
+    //if the above code crashes please use strdup
     strcpy(asset->origin,path);
     context.n_assets++;
 
@@ -221,13 +223,13 @@ int findAssetByName(char* path){
 }
 
 Easy_Asset_t* loadImage(char* path){
-    if (!canLoadAsset()) {
-        cerr << "Cannot load asset: asset array is full or renderer is null." << endl;
-        return NULL;
-    }
     Easy_Asset_t* asset = isAssetAlreadyLoaded(path);
     if (asset != NULL) {
         return asset; // Asset already loaded
+    }
+    if (!canLoadAsset()) {
+        cerr << "Cannot load asset: asset array is full or renderer is null." << endl;
+        return NULL;
     }
     SDL_Surface* image = IMG_Load(path);
     if (!image) {
@@ -241,15 +243,15 @@ Easy_Asset_t* loadImage(char* path){
         return NULL;
     }
     asset = &context.assets[context.n_assets];
-asset->detail.image.surface = image;
-asset->detail.image.texture = texture;
-asset->detail.image.height = image->h;
-asset->detail.image.width = image->w;
-asset->type = ASSET_IMAGE;
-asset->loaded = true;
-asset->origin = strdup(path); // Use strdup to simplify memory management
-context.n_assets++;
-return asset;
+    asset->detail.image.surface = image;
+    asset->detail.image.texture = texture;
+    asset->detail.image.height = image->h;
+    asset->detail.image.width = image->w;
+    asset->type = ASSET_IMAGE;
+    asset->loaded = true;
+    asset->origin = strdup(path); // Use strdup to simplify memory management
+    context.n_assets++;
+    return asset;
 }
 
 void drawAsset(uint16_t x, uint16_t y, Easy_Asset_t* asset,
