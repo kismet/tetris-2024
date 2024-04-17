@@ -317,7 +317,7 @@ void initWorld(char world[WORLD_HEIGHT][WORLD_WIDTH]){
 
 //TODO funzione updateScore invocata da deleteLine e da placeIt che aggiorna il punteggio
 void updateScore(int& currentScore, int lineCleared) {
-    int points[] = {100, 200, 400, 800};
+    int points[] = {0, 100, 200, 400, 800};
 
     currentScore += points[lineCleared];
 }
