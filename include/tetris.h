@@ -24,7 +24,6 @@ typedef struct Player_Data {
 } Player_Data_t;
 
 typedef struct World_Data {
-    int points = 0;
     int topScore = 0;
     int level = 1;
     int nextBlock  = -1;
