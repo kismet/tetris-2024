@@ -323,7 +323,7 @@ void updateScore(Player_Data_t playerOne, int lineCleared, int& currentScore) {
 }
 
 //TODO funzione per upgradeLevel controlla il numero di linee o punteggio e aumenta velocità
-void upgradeLevel(int targetScore, int& currentLevel, int& fallSpeed, int& MaxFallSpeed) {
+void upgradeLevel(int targetScore, int& currentLevel, int& fallSpeed, int MaxFallSpeed) {
     fallSpeed -= 75;
     currentLevel++;
     if(fallSpeed < MaxFallSpeed) {

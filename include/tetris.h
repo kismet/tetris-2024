@@ -61,7 +61,7 @@ int randIndex();
 
 void updateScore(Player_Data_t playerOne, int lineCleared, int& currentScore);
 
-void upgradeLevel(int targetScore, int& currentLevel, int& fallSpeed, int& MaxFallSpeed);
+void upgradeLevel(int targetScore, int& currentLevel, int& fallSpeed, int MaxFallSpeed);
 
 void setupNewGames(Player_Data_t& player, World_Data_t& world, char map[WORLD_HEIGHT][WORLD_WIDTH]);
 
