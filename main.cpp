@@ -286,7 +286,7 @@ void drawGame(){
             int target = currentGame.level * 500;
             if(playerOne.score >= target){
                     upgradeLevel(target, currentGame.level,
-                                 currentGame.fallSpeed, MaxFallSpeed);
+                                 currentGame.fallSpeed, FALL_SPEED_LIMIT);
             }
              if(gameOver(playerOne, currentGame, blocks, world)){
                             cout << "Game Over.." << endl;
