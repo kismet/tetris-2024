@@ -2,6 +2,7 @@
 #include "../include/easy_sdl.h"
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <cstring>
 #include <iostream>
 
 using namespace std;
@@ -220,42 +221,35 @@ int findAssetByName(char* path){
 }
 
 Easy_Asset_t* loadImage(char* path){
+    if (!canLoadAsset()) {
+        cerr << "Cannot load asset: asset array is full or renderer is null." << endl;
+        return NULL;
+    }
     Easy_Asset_t* asset = isAssetAlreadyLoaded(path);
-    if( asset != NULL ){
-        return asset;
+    if (asset != NULL) {
+        return asset; // Asset already loaded
     }
-    if(!canLoadAsset()){
-        return NULL;
-    }
-
-    asset = &context.assets[context.n_assets];
-
     SDL_Surface* image = IMG_Load(path);
-    if(!image){
-        cerr<<"Unable to load "<<path
-            <<" Please check that file exits."<<endl
-            <<"SDL says:"<<IMG_GetError()<<endl<<endl;
+    if (!image) {
+        cerr << "Unable to load image " << path << ". SDL Error: " << IMG_GetError() << endl;
         return NULL;
     }
-    asset->detail.image.surface = image;
-    asset->detail.image.height = image->h;
-    asset->detail.image.width = image->w;
-
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(
-            context.renderer, image );
-    if(!texture){
-        cerr<<"Unable to create texture "<<path<<" "<<SDL_GetError();
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(context.renderer, image);
+    if (!texture) {
+        cerr << "Unable to create texture from image. SDL Error: " << SDL_GetError() << endl;
+        SDL_FreeSurface(image);  // Free the surface to avoid memory leak
         return NULL;
     }
-    asset->loaded = true;
-    asset->detail.image.texture = texture;
-    asset->type = ASSET_IMAGE;
-    asset->id = context.n_assets;
-    asset->origin = (char *) malloc(strlen(path));
-    strcpy(asset->origin,path);
-    context.n_assets++;
-    //TODO init name
-    return asset;
+    asset = &context.assets[context.n_assets];
+asset->detail.image.surface = image;
+asset->detail.image.texture = texture;
+asset->detail.image.height = image->h;
+asset->detail.image.width = image->w;
+asset->type = ASSET_IMAGE;
+asset->loaded = true;
+asset->origin = strdup(path); // Use strdup to simplify memory management
+context.n_assets++;
+return asset;
 }
 
 void drawAsset(uint16_t x, uint16_t y, Easy_Asset_t* asset,
