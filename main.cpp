@@ -90,6 +90,7 @@ void menu(SDL_Event*);
 void game(SDL_Event*);
 void pause(SDL_Event*);
 void credits(SDL_Event*);
+void gameover(SDL_Event*);
 
 void (*gestore_eventi)(SDL_Event *) = &menu;
 
@@ -277,7 +278,12 @@ void drawGame(){
                     else {
                         placeIt(playerOne.y, playerOne.x, playerOne.rotation, blocks, playerOne.assetIdx, world, playerOne, playerOne.score);
                         newBlock(playerOne, currentGame);
+                        if(gameOver(blocks, playerOne, world)){
+                            cout << "Game Over.." << endl;
+                            gestore_eventi = &gameover;
+                        }
                     }
+
             }
 
 
@@ -333,6 +339,23 @@ void game(SDL_Event* e){
                             break;
                     }
         }
+}
+
+void gameover(SDL_Event* e){
+ cout << "game over screen" << endl;
+}
+
+void drawGameover(){
+    // Clear the screen
+    SDL_Renderer *renderer = getSDLRender();
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
+    Easy_Asset_t *asset = loadAsset("assets/grafica/menu.png");
+    drawAsset(0,0, asset);
+
+    // Update the screen
+    SDL_RenderPresent(renderer);
 }
 
 
@@ -572,6 +595,9 @@ int main(int argc, char** args) {
         handleInput();
         if(gestore_eventi == &game){
             drawGame();
+        }
+        if(gestore_eventi == &gameover){
+            drawGameover();
         }
         if(gestore_eventi == &menu){
             drawMenu();
