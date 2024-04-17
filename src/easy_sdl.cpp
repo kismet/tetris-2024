@@ -223,13 +223,13 @@ int findAssetByName(char* path){
 }
 
 Easy_Asset_t* loadImage(char* path){
-    if (!canLoadAsset()) {
-        cerr << "Cannot load asset: asset array is full or renderer is null." << endl;
-        return NULL;
-    }
     Easy_Asset_t* asset = isAssetAlreadyLoaded(path);
     if (asset != NULL) {
         return asset; // Asset already loaded
+    }
+    if (!canLoadAsset()) {
+        cerr << "Cannot load asset: asset array is full or renderer is null." << endl;
+        return NULL;
     }
     SDL_Surface* image = IMG_Load(path);
     if (!image) {
