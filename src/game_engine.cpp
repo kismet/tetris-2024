@@ -269,8 +269,8 @@ bool isLineComplete(int line, char world[WORLD_HEIGHT][WORLD_WIDTH]){
     bool isComplete = true;
     int i = 0;
     while(i < WORLD_WIDTH && isComplete){
-        if(world[line][i] != ' '){
-            isComplete = false;
+        if(world[line][i] == ' '){
+            return false;
         }
         i++;
     }
