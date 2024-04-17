@@ -60,6 +60,17 @@ TextStyle_t info = {
     .foreground = {255, 255, 255, 255}
 };
 
+TextStyle_t game_over = {
+    .solid = true,
+    .size = 40,
+    .italic = false,
+    .underline = false,
+    .bold = false,
+    .strikethrough = false,
+    .font = NULL,
+    .foreground = {0, 0, 0, 255}
+};
+
 
 Player_Data_t playerOne;
 
@@ -83,6 +94,9 @@ char* PAUSE_OPTIONS[PAUSE_OPTIONS_COUNT] = {"New Game", "Resume", "Menu"};
 
 const int CREDITS_COUNT = 1;
 char* CREDITS_OPTIONS[CREDITS_COUNT] = {"Menu"};
+
+const int GAMEOVER_COUNT = 2;
+char* GAMEOVER_OPTIONS[GAMEOVER_COUNT] = {"Menu", "Quit"};
 
 int selectedOption = 0;
 
@@ -276,12 +290,16 @@ void drawGame(){
                         currentGame.lastTime = currentTime;
                     }
                     else {
-                        placeIt(playerOne.y, playerOne.x, playerOne.rotation, blocks, playerOne.assetIdx, world, playerOne, playerOne.score);
-                        newBlock(playerOne, currentGame);
                         if(gameOver(blocks, playerOne, world)){
                             cout << "Game Over.." << endl;
                             gestore_eventi = &gameover;
                         }
+                        placeIt(playerOne.y, playerOne.x, playerOne.rotation, blocks, playerOne.assetIdx, world, playerOne, playerOne.score);
+
+                        if(playerOne.score > currentGame.topScore){
+                            currentGame.topScore = playerOne.score;
+                        }
+                        newBlock(playerOne, currentGame);
                     }
 
             }
@@ -342,17 +360,90 @@ void game(SDL_Event* e){
 }
 
 void gameover(SDL_Event* e){
- cout << "game over screen" << endl;
+    if (e->type == SDL_QUIT) {
+        freeEasySDL();
+        exit(0);
+    } else if (e->type == SDL_KEYDOWN) {
+        switch (e->key.keysym.sym) {
+            case SDLK_LEFT:
+                selectedOption = (selectedOption - 1 + GAMEOVER_COUNT) % GAMEOVER_COUNT;
+                break;
+            case SDLK_a:
+                selectedOption = (selectedOption - 1 + GAMEOVER_COUNT) % GAMEOVER_COUNT;
+                break;
+            case SDLK_d:
+                 selectedOption = (selectedOption + 1) % GAMEOVER_COUNT;
+                break;
+            case SDLK_RIGHT:
+                selectedOption = (selectedOption + 1) % GAMEOVER_COUNT;
+                break;
+            case SDLK_RETURN:
+                switch (selectedOption) {
+                    case 0:
+                        cout << "Back to menu..." << endl;
+                        gestore_eventi = &menu;
+                        break;
+                    case 1:
+                        cout << "Quit..." << endl;
+                        exit(0);
+                        break;
+                }
+                break;
+        }
+    }
 }
 
-void drawGameover(){
+void drawGameover(Player_Data_t player){
+
+    const int G_INFO = 3;
+
+    string topString = to_string(currentGame.topScore);
+    string scoreString = to_string(playerOne.score);
+
+    char* gameoverInfo[G_INFO] = {&topString[0],&scoreString[0]};
+
     // Clear the screen
     SDL_Renderer *renderer = getSDLRender();
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    Easy_Asset_t *asset = loadAsset("assets/grafica/menu.png");
+    Easy_Asset_t *asset = loadAsset("assets/grafica/gameover.png");
     drawAsset(0,0, asset);
+
+    normal.size = 42;
+    highlight.size = 42;
+
+    int startX = 345;
+    for (int i = 0; i < GAMEOVER_COUNT; ++i) {
+        int x = startX + i * 510;
+        int y = 790;
+        bool isSelected = (i == selectedOption);
+        if(isSelected){
+            setTextStyle(&highlight);
+        }else{
+            setTextStyle(&game_over);
+        }
+        drawText(
+                (uint16_t ) x,(uint16_t ) y + i * -10,
+                (uint16_t ) 200, (uint16_t ) 50,
+                GAMEOVER_OPTIONS[i], TEXT_LEFT
+        );
+    }
+
+
+    int pointStart = 340;
+    for(int i = 0; i < GAMEOVER_COUNT; i++){
+        int x = pointStart + i * 510;
+        int y = 460;
+        setTextStyle(&info);
+        drawText(
+                (uint16_t ) x,(uint16_t ) y,
+                (uint16_t ) 200, (uint16_t ) 50,
+                gameoverInfo[i], TEXT_LEFT
+                );
+    }
+
+
 
     // Update the screen
     SDL_RenderPresent(renderer);
@@ -588,6 +679,7 @@ int main(int argc, char** args) {
     highlight.font = normal.font;
     info.font = loadAsset("assets/fonts/Monaco.ttf");
     score.font = info.font;
+    game_over.font = normal.font;
     gestore_eventi =  &menu;
 
 
@@ -597,7 +689,7 @@ int main(int argc, char** args) {
             drawGame();
         }
         if(gestore_eventi == &gameover){
-            drawGameover();
+            drawGameover(playerOne);
         }
         if(gestore_eventi == &menu){
             drawMenu();
