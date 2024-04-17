@@ -55,13 +55,14 @@
 		<Unit filename="assets/square/Yellow.png" />
 		<Unit filename="include/config.h" />
 		<Unit filename="include/easy_sdl.h" />
+		<Unit filename="include/tetris.h" />
 		<Unit filename="include/tetris_asset.h" />
 		<Unit filename="main.cpp">
 			<Option target="Debug" />
 		</Unit>
 		<Unit filename="src/easy_sdl.cpp" />
+		<Unit filename="src/game_engine.cpp" />
 		<Unit filename="src/testris_asset.cpp" />
-		<Unit filename="test/loading_assets.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
