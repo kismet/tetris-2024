@@ -5,6 +5,7 @@ const int MAX = 4;
 
 const int SHAPE_WIDTH = MAX;
 const int SHAPE_HEIGHT = MAX;
+static int MaxFallSpeed = 0;
 
 const int WORLD_HEIGHT = 24 + 4;
 const int WORLD_WIDTH = 10;
@@ -60,7 +61,7 @@ int randIndex();
 
 void updateScore(Player_Data_t playerOne, int lineCleared, int& currentScore);
 
-void upgradeLevel(int currentScore, int& currentLevel, int& fallSpeed, int& MaxFallSpeed);
+void upgradeLevel(int targetScore, int& currentLevel, int& fallSpeed, int& MaxFallSpeed);
 
 void setupNewGames(Player_Data_t& player, World_Data_t& world, char map[WORLD_HEIGHT][WORLD_WIDTH]);
 

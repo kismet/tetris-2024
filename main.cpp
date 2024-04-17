@@ -283,16 +283,22 @@ void drawGame(){
             int currentTime = SDL_GetTicks();
             int s = currentTime - currentGame.lastTime;
 
+            int target = currentGame.level * 500;
+            if(playerOne.score >= target){
+                    upgradeLevel(target, currentGame.level,
+                                 currentGame.fallSpeed, MaxFallSpeed);
+            }
+             if(gameOver(playerOne, currentGame, blocks, world)){
+                            cout << "Game Over.." << endl;
+                            gestore_eventi = &gameover;
+                }
+
             if (s >= currentGame.fallSpeed) {
                     if (!isColliding(playerOne.y + 1, playerOne.x, playerOne.rotation,  playerOne, currentGame, blocks, world)) {
                         playerOne.y += 1;
                         currentGame.lastTime = currentTime;
                     }
                     else {
-                        if(gameOver(playerOne, currentGame, blocks, world)){
-                            cout << "Game Over.." << endl;
-                            gestore_eventi = &gameover;
-                        }
                         placeIt(playerOne, currentGame, blocks, world, playerOne.score);
 
                         if(playerOne.score > currentGame.topScore){
@@ -696,8 +702,6 @@ int main(int argc, char** args) {
         if(gestore_eventi == &credits){
             drawCredits();
         }
-
-        SDL_Delay(10);
     }
 
 }
