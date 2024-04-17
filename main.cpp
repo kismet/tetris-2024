@@ -283,11 +283,7 @@ void drawGame(){
             int currentTime = SDL_GetTicks();
             int s = currentTime - currentGame.lastTime;
 
-            int target = currentGame.level * 500;
-            if(playerOne.score >= target){
-                    upgradeLevel(target, currentGame.level,
-                                 currentGame.fallSpeed, FALL_SPEED_LIMIT);
-            }
+            upgradeLevel(playerOne, currentGame);
              if(gameOver(playerOne, currentGame, blocks, world)){
                             cout << "Game Over.." << endl;
                             gestore_eventi = &gameover;
