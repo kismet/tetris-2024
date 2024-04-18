@@ -265,8 +265,8 @@ void newBlock(Player_Data_t& playerOne, World_Data_t& currentGame){
         currentGame.nextBlock = randIndex();
 }
 
-//TODO block in assetsOrigin[4] made a crash
 void drawGame(){
+    //TODO Avoid to render multiple time info and block if nothing happened
          // Clear the screen
             SDL_Renderer *renderer = getSDLRender();
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -310,7 +310,6 @@ void drawGame(){
 
 
 
-//TODO implement the game mode
 void game(SDL_Event* e){
 
         if(e->type == SDL_QUIT){
@@ -684,6 +683,7 @@ int main(int argc, char** args) {
     while (!quit) {
         handleInput();
         if(gestore_eventi == &game){
+            //TODO Silly issue we should reset the timer related to movement when we move
             drawGame();
         }
         if(gestore_eventi == &gameover){
