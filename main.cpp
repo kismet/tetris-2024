@@ -348,6 +348,12 @@ void game(SDL_Event* e){
                                 playerOne.rotation = nextRotation;
                              }
                             break;
+                        case SDLK_UP:
+                            nextRotation = (playerOne.rotation + 1 + ROTATION)%ROTATION;
+                             if (!isColliding(playerOne.y, playerOne.x, nextRotation, playerOne, currentGame, blocks, world)){
+                                playerOne.rotation = nextRotation;
+                             }
+                            break;
                         case SDLK_SPACE:
                             fallDown(playerOne, currentGame, blocks, world, playerOne.score);
                             newBlock(playerOne, currentGame);
