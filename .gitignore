@@ -54,3 +54,6 @@ bin/
 .idea/
 TetrisSDLC.depend
 cmake-build-debug/
+
+# Layout
+*.layout
